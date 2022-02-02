@@ -31,7 +31,7 @@ Route::group([
     Route::post('register', [AuthController::class,'register']);
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', [AuthController::class,'me']);
+    Route::post('profile', [AuthController::class,'profile']);
 
 });
 
@@ -40,6 +40,14 @@ Route::get('/companies/{id}',[CompanyController::class,'show']);
 Route::post('/companies',[CompanyController::class,'store']);
 Route::put('/companies/{id}',[CompanyController::class,'update']);
 Route::delete('/companies/{id}',[CompanyController::class,'destroy']);
+
+Route::group(['middleware' => ['jwt.verify']], function() {
+
+// Routes for Users
+Route::get('/companies/{companyId}/user/{id}',[Usercontrollerontroller::class,'show']);
+Route::post('/companies/{companyId}/user', [UserController::class,'create']);
+Route::put('/companies/{companyId}/user/{id}',[UserController::class,'update']);
+Route::delete('/companies/{companyId}/user/{id}',[Usercontrollerontroller::class,'destroy']);
 
 // Routes for Post
 Route::get('/users/posts',[PostController::class,'index']);
@@ -54,12 +62,6 @@ Route::get('/users/{user_id}/categories/{id}',[CategoryController::class,'show']
 Route::post('/users/{user_id}/categories',[CategoryController::class,'store']);
 Route::put('/users/{user_id}/categories/{id}',[CategoryController::class,'update']);
 Route::delete('/users/{users_id}/categories/{id}',[CategoryController::class,'destroy']);
-
-// Routes for Users
-Route::get('/companies/{companyId}/user/{id}',[Usercontrollerontroller::class,'show']);
-Route::post('/companies/{companyId}/user', [AuthController::class,'register']);
-Route::put('/companies/{companyId}/user/{id}',[UserController::class,'update']);
-Route::delete('/companies/{companyId}/user/{id}',[Usercontrollerontroller::class,'destroy']);
 
 // Routes for Tag
 Route::get('/users/{user_id}/tags',[TagController::class,'index']);
@@ -80,5 +82,4 @@ Route::get('/posts/{post_id}/tags',[PostTagController::class,'index']);
 Route::post('/posttags',[PostTagController::class,'create']);
 Route::post('/posts/{post_id}/tags/{tag_id}',[PostTagController::class,'destroy']);
 
-// Routed for company-employee
-
+});

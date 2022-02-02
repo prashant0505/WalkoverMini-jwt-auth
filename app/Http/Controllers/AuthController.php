@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    protected $user;
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->user =$this->guard()->user();
+    }
     
     public function register(Request $request)
     {  
@@ -48,12 +54,26 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    public function profile()
+    {
+        return response()->json(auth()->user());
+    }
+
+    public function refresh(){
+        // return $this->respondWithToken($this->guard()->refresh());
+        }
+
     protected function respondWithToken($token)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            // 'expires_in' => auth()->factory()->getTTL() * 60
+            // 'expires_in' => auth()->factory()->getTTL() * 60 
         ]);
+    }
+
+    public function guard()
+    {
+        return Auth::guard();
     }
 }
