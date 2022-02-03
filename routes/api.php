@@ -44,10 +44,10 @@ Route::delete('/companies/{id}',[CompanyController::class,'destroy']);
 Route::group(['middleware' => ['jwt.verify']], function() {
 
 // Routes for Users
-Route::get('/companies/{companyId}/user/{id}',[Usercontrollerontroller::class,'show']);
-Route::post('/companies/{companyId}/user', [UserController::class,'create']);
-Route::put('/companies/{companyId}/user/{id}',[UserController::class,'update']);
-Route::delete('/companies/{companyId}/user/{id}',[Usercontrollerontroller::class,'destroy']);
+Route::get('/companies/{company_id}/users/{id}',[UserController::class,'show']);
+Route::post('/companies/{company_id}/users', [UserController::class,'create']);
+Route::put('/companies/{company_id}/users/{id}',[UserController::class,'update']);
+Route::delete('/companies/{company_id}/users/{id}',[Usercontroller::class,'destroy']);
 
 // Routes for Post
 Route::get('/users/posts',[PostController::class,'index']);

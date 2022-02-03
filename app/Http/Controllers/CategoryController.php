@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -35,15 +36,8 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request,)
     {
-        $validator = Validator::make($request->all(), [
-            'Name' => 'required|string|min:2|max:100',
-            'user_id' => 'exists:users,id'
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
         $cat=Category::create([
             'Name' => $request->Name,
             'user_id'=>$request->user_id,
@@ -83,16 +77,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Category $category,$userId,$id)
+    public function update(CategoryRequest $request,Category $category,$userId,$id)
     {
         $cat=$category->find($id);
-        $validator = Validator::make($request->all(), [
-            'Name' => 'required|string|min:2|max:100',
-            'user_id' => 'exists:users,id'
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
             $updatedCategory = $cat->where("id",$id)->update([
             'Name' => $request->Name,
             'user_id'=>$request->user_id,

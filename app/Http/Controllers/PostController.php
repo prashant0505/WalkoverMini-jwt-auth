@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -34,17 +35,8 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Post $post,$userId)
+    public function store(PostRequest $request, Post $post,$userId)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|min:2|max:100',
-            'body'=>'required|string|',
-            'user_id' => 'exists:users,id',
-            'category_id' => 'exists:categories,id'
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
             $p=$post->create([
             'title' => $request->title,
             'body' => $request->body,
@@ -86,17 +78,8 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post,$userId,$id)
+    public function update(PostRequest $request, Post $post,$userId,$id)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|min:2|max:100',
-            'body'=>'required|string|',
-            'user_id' => 'exists:users,id',
-            'category_id' => 'exists:categories,id'
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
         $p=$post->find($id);
         $posted=$p->where("id",$id)->update([
             'title' => $request->title,

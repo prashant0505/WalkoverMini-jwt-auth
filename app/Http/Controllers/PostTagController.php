@@ -27,13 +27,6 @@ class PostTagController extends Controller
      */
     public function create(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'post_id' => 'exists:posts,id',
-            'tag_id' => 'exists:tags,id'
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
             $PT=Post_tag::create([
             'post_id' => $request->post_id,
             'tag_id' => $request->tag_id,
@@ -95,19 +88,13 @@ class PostTagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post_tag $posttag,$tag,$post)
+    public function destroy(Post_tag $posttags,Tag $tagID, Post $postID)
     {   
-        Post_tag::where('tag_id',$tag->id)->get()->each(function ($post) {
-            $post->deatch();
-            $post->delete();
-        });
-            $tag->delete();
+        $com = $posttags->where("post_id",'=', $postId)->get()->Where(["tag_id",'=', $tagId]);
+            if($com)
+                $com->each->delete();
+            else
+                return response()->json("tag not used");
+        return response()->json("deleted");
     }
-
-    // $com = $post_tags->where("post_id",'=', $postId)->get()->Where(["tag_id",'=', $tagId]);
-    //     if($com)
-    //        $com->each->delete();
-    //     else
-    //         return response()->json("tag not used");
-    //     return response()->json("deleted");
 }

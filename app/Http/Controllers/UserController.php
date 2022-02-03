@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,24 +25,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(UserRequest $request)
     {
         $logUser = auth()->user();
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:2|max:100',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:6',
-            'salary'=> 'required|integer|min:3',
-            'company_id' => 'exists:companies,id',
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-        
         if($logUser->company_id != $request->company_id){
-            return response()->json(['error'=>"cannot register to another company"]);
+            return response()->json(['error'=>"Unauthorized to register in other company"]);
         }
-        $user = User::create([
+            $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' =>Hash::make($request->password),
@@ -73,18 +63,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $user= User::all();
     }
 
     /**
@@ -94,18 +73,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,  User $user,$companyId,$id)
+    public function update(UserRequest $request, User $user,$companyId,$id)
     {
         $us = $user->find($id);
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:2|max:100',
-            'email' => 'required|string|email|max:100',
-            'password' => 'required|string|min:6',
-            'salary'=> 'required|integer|min:3'
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|string|min:2|max:100',
+        //     'email' => 'required|string|email|max:100',
+        //     'password' => 'required|string|min:6',
+        //     'salary'=> 'required|integer|min:3'
+        // ]);
+        // if($validator->fails()) {
+        //     return response()->json($validator->errors(), 400);
+        // }
        
         $us->where("id", $id)->update([
                 'Name' => $request->name,

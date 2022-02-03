@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TagRequest;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -34,16 +35,8 @@ class TagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TagRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'Name' => 'required|string|min:2|max:100',
-            'userId' => 'required|exists:Users,id',
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-       
         $tag = Tag::create([
             'Name' => $request->Name,
             'user_id' => $request->userId,
@@ -84,16 +77,9 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tag $tags,$userId,$id)
+    public function update(TagRequest $request, Tag $tags,$userId,$id)
     {
-        $tag = $tags->find($id);
-        $validator = Validator::make($request->all(), [
-            'Name' => 'required|string|min:2|max:100',
-            'userId' => 'required|exists:user,id',
-             ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }       
+        $tag = $tags->find($id);       
         $tagged=$tag->where("id", $id)->update([
                 'Name' => $request->Name,
                 'user_id' => $request->userId,

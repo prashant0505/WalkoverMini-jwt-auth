@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -34,17 +35,8 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'body' => 'required|string|min:2|max:100',
-            'user_id' => 'required|exists:users,id',
-            'post_id' => 'required|exists:posts,id',
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-       
+    public function store(CommentRequest $request)
+    {      
         $comm = Comment::create([
             'Body' => $request->body,
             'user_id' => $request->user_id,
@@ -85,16 +77,8 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment, $user_id, $id)
+    public function update(CommentRequest $request, Comment $comment, $user_id, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'body' => 'required|string|min:2|max:100',
-            'user_id' => 'required|exists:users,id',
-            'post_id' => 'required|exists:posts,id',
-        ]);
-        if($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
         $comm=$comment->find($id);
         $commented=$comm->where("id",$id)->update([
             'body' => $request->body,
