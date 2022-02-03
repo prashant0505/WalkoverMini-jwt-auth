@@ -50,8 +50,8 @@ Route::put('/companies/{company_id}/users/{id}',[UserController::class,'update']
 Route::delete('/companies/{company_id}/users/{id}',[Usercontroller::class,'destroy']);
 
 // Routes for Post
-Route::get('/users/posts',[PostController::class,'index']);
-Route::get('/users/posts/{id}',[PostController::class,'show']);
+Route::get('/users/{user_id}/posts',[PostController::class,'index']);
+Route::get('/users/{user_id/}posts/{id}',[PostController::class,'show']);
 Route::post('/users/{user_id}/posts',[PostController::class,'store']);
 Route::put('/users/{user_id}/posts/{id}',[PostController::class,'update']);
 Route::delete('/users/posts/{id}',[PostController::class,'destroy']);
