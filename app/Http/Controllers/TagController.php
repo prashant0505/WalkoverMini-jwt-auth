@@ -37,6 +37,10 @@ class TagController extends Controller
      */
     public function store(TagRequest $request)
     {
+        $logUser = auth()->user();
+        if($logUser->id != $request->user_id){
+            return response()->json(['error'=>"denied"]);
+        }
         $tag = Tag::create([
             'Name' => $request->Name,
             'user_id' => $request->userId,
@@ -79,7 +83,11 @@ class TagController extends Controller
      */
     public function update(TagRequest $request, Tag $tags,$userId,$id)
     {
-        $tag = $tags->find($id);       
+        $tag = $tags->find($id); 
+        $logUser = auth()->user();
+        if($logUser->id != $tag->user_id){
+            return response()->json(['error'=>"cannot update to another users tag"]);
+        }      
         $tagged=$tag->where("id", $id)->update([
                 'Name' => $request->Name,
                 'user_id' => $request->userId,

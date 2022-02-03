@@ -37,6 +37,10 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {      
+        $logUser = auth()->user();
+        if($logUser->id != $request->user_id){
+            return response()->json(['error'=>"denied{userId}"]);
+        }
         $comm = Comment::create([
             'Body' => $request->body,
             'user_id' => $request->user_id,
@@ -80,6 +84,10 @@ class CommentController extends Controller
     public function update(CommentRequest $request, Comment $comment, $user_id, $id)
     {
         $comm=$comment->find($id);
+        $logUser = auth()->user();
+        if($logUser->id != $comm->user_id){
+            return response()->json(['error'=>"cannot update comment of diff user"]);
+        }
         $commented=$comm->where("id",$id)->update([
             'body' => $request->body,
             'user_id' => $request->user_id,

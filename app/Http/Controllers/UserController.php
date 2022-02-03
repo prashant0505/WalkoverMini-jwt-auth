@@ -29,6 +29,10 @@ class UserController extends Controller
     {
         $logUser = auth()->user();
         if($logUser->company_id != $request->company_id){
+            return response()->json(['error'=>"cannot register to another company"]);
+        }
+        $logUser = auth()->user();
+        if($logUser->company_id != $request->company_id){
             return response()->json(['error'=>"Unauthorized to register in other company"]);
         }
             $user = User::create([
@@ -76,15 +80,11 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user,$companyId,$id)
     {
         $us = $user->find($id);
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required|string|min:2|max:100',
-        //     'email' => 'required|string|email|max:100',
-        //     'password' => 'required|string|min:6',
-        //     'salary'=> 'required|integer|min:3'
-        // ]);
-        // if($validator->fails()) {
-        //     return response()->json($validator->errors(), 400);
-        // }
+        
+        $logUser = auth()->user();
+        if($logUser->company_id != $us->company_id){
+            return response()->json(['error'=>"cannot update to another company"]);
+        }
        
         $us->where("id", $id)->update([
                 'Name' => $request->name,

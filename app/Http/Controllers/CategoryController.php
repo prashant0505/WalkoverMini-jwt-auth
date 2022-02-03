@@ -38,6 +38,10 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request,)
     {
+        $logUser = auth()->user();
+        if($logUser->id != $request->user_id){
+            return response()->json(['error'=>"denied{userId}"]);
+        }
         $cat=Category::create([
             'Name' => $request->Name,
             'user_id'=>$request->user_id,
@@ -80,6 +84,10 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request,Category $category,$userId,$id)
     {
         $cat=$category->find($id);
+        $logUser = auth()->user();
+        if($logUser->id != $cat->user_id){
+            return response()->json(['error'=>"cannot update to another users category"]);
+        }
             $updatedCategory = $cat->where("id",$id)->update([
             'Name' => $request->Name,
             'user_id'=>$request->user_id,

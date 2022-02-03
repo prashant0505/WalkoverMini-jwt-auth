@@ -27,6 +27,11 @@ class PostTagController extends Controller
      */
     public function create(Request $request)
     {
+        $user = Post::find($request->postId)->user_id;
+            $logUser = auth()->user();
+            if($logUser->id != $user){
+                return response()->json(['error'=>"denied{userId}"]);
+            }
             $PT=Post_tag::create([
             'post_id' => $request->post_id,
             'tag_id' => $request->tag_id,
@@ -88,9 +93,9 @@ class PostTagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post_tag $posttags,Tag $tagID, Post $postID)
+    public function destroy(Post_tag $post_tags,$postId,$tagId)
     {   
-        $com = $posttags->where("post_id",'=', $postId)->get()->Where(["tag_id",'=', $tagId]);
+        $com = $post_tags->where("post_id",'=', $postId)->get()->Where(["tag_id",'=', $tagId]);
             if($com)
                 $com->each->delete();
             else

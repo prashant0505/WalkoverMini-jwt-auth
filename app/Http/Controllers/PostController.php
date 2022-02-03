@@ -37,6 +37,10 @@ class PostController extends Controller
      */
     public function store(PostRequest $request, Post $post,$userId)
     {
+        $logUser = auth()->user();
+        if($logUser->id != $request->user_id){
+            return response()->json(['error'=>"denied{userId}"]);
+        }
             $p=$post->create([
             'title' => $request->title,
             'body' => $request->body,
@@ -81,6 +85,10 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post,$userId,$id)
     {
         $p=$post->find($id);
+        $logUser = auth()->user();
+            if($logUser->id != $p->user_id){
+            return response()->json(['error'=>"cannot update to another users post"]);
+        }
         $posted=$p->where("id",$id)->update([
             'title' => $request->title,
             'body' => $request->body,
