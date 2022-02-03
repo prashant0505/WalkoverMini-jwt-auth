@@ -35,46 +35,46 @@ Route::group([
 
 });
 
+Route::group(['middleware' => ['jwt.verify']], function() {
+
 // Routes for Company 
 Route::get('/companies/{id}',[CompanyController::class,'show']);
 Route::post('/companies',[CompanyController::class,'store']);
-Route::put('/companies/{id}',[CompanyController::class,'update']);
+Route::patch('/companies/{id}',[CompanyController::class,'update']);           
 Route::delete('/companies/{id}',[CompanyController::class,'destroy']);
-
-Route::group(['middleware' => ['jwt.verify']], function() {
 
 // Routes for Users
 Route::get('/companies/{company_id}/users/{id}',[UserController::class,'show']);
 Route::post('/companies/{company_id}/users', [UserController::class,'create']);
-Route::put('/companies/{company_id}/users/{id}',[UserController::class,'update']);
+Route::patch('/companies/{company_id}/users/{id}',[UserController::class,'update']);
 Route::delete('/companies/{company_id}/users/{id}',[Usercontroller::class,'destroy']);
 
 // Routes for Post
 Route::get('/users/{user_id}/posts',[PostController::class,'index']);
 Route::get('/users/{user_id/}posts/{id}',[PostController::class,'show']);
 Route::post('/users/{user_id}/posts',[PostController::class,'store']);
-Route::put('/users/{user_id}/posts/{id}',[PostController::class,'update']);
+Route::patch('/users/{user_id}/posts/{id}',[PostController::class,'update']);
 Route::delete('/users/posts/{id}',[PostController::class,'destroy']);
 
 // Routes for Category
 Route::get('/users/{user_id}/categories',[CategoryController::class,'index']);
 Route::get('/users/{user_id}/categories/{id}',[CategoryController::class,'show']);
 Route::post('/users/{user_id}/categories',[CategoryController::class,'store']);
-Route::put('/users/{user_id}/categories/{id}',[CategoryController::class,'update']);
+Route::patch('/users/{user_id}/categories/{id}',[CategoryController::class,'update']);
 Route::delete('/users/{users_id}/categories/{id}',[CategoryController::class,'destroy']);
 
 // Routes for Tag
 Route::get('/users/{user_id}/tags',[TagController::class,'index']);
 Route::get('/users/{user_id}/tags/{id}',[TagController::class,'show']);
 Route::post('/users/{user_id}/tags',[TagController::class,'store']);
-Route::put('/users/{user_id}/tags/{id}',[TagController::class,'update']);
+Route::patch('/users/{user_id}/tags/{id}',[TagController::class,'update']);
 Route::delete('/users/{user_id}/tags/{id}',[TagController::class,'destroy']);
 
 // Routes for Comment
 Route::get('/users/{user_id}/comments',[CommentController::class,'index']);
 Route::get('/users/{user_id}/comments/{id}',[CommentController::class,'show']);
 Route::post('/users/{user_id}/comments',[CommentController::class,'store']);
-Route::put('/users/{user_id}/comments/{id}',[CommentController::class,'update']);
+Route::patch('/users/{user_id}/comments/{id}',[CommentController::class,'update']);
 Route::delete('/users/{user_id}/comments/{id}',[CommentController::class,'destroy']);
 
 // Routed for PostTag 

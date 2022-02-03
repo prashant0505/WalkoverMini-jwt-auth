@@ -13,7 +13,7 @@ class CompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,19 +23,11 @@ class CompanyRequest extends FormRequest
      */
     public function rules()
     {
-        switch($this->method()){
-            case 'Post' :
-                return [
-                    'name' => 'required|string|min:2|max:100',
-                    'location'=>'required|string|min:3',
-                    'company_id' => 'exists:companies,id'
-                ];
-            case 'Put' :
-                return [
-                    'name' => 'required|string|min:2|max:100',
-                    'location'=>'required|string|min:3',
-                    'company_id' => 'required|exists:companies,id'
-                ];
-        }    
+        
+        return [
+            'name' => 'required|string|min:2|max:100',
+            'location'=>'required|string|min:3',
+            'company_id' => 'exists:companies,id'
+        ];    
     }
 }

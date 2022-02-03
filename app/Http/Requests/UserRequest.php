@@ -25,23 +25,12 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        switch($this->method()){
-        case 'Post' :
-            return [
-                'name' => 'required|string|min:2|max:100',
-                'email' => 'required|string|email|max:100|unique:users',
-                'password' => 'required|string|min:6',
-                'salary'=> 'required|integer|min:3',
-                'company_id' => 'exists:companies,id'
-            ];
-        
-        case 'Put' :
-            return [
-                'name' => 'required|string|min:2|max:100',
-                'email' => 'required|string|email|max:100|unique:users',
-                'password' => 'required|string|min:6',
-                'salary'=> 'required|integer|min:3',
-            ];
-        }
+        return [
+            'name' => 'required|string|min:2|max:100',
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|min:6',
+            'salary'=> 'required|integer|min:3',
+            'company_id' => 'exists:companies,id'
+        ];
     }
 }

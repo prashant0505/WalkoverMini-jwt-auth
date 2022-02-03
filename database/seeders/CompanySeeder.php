@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Faker\Factory as Faker;
 
 class CompanySeeder extends Seeder
 {
@@ -14,25 +15,25 @@ class CompanySeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Company $company,User $user)
+    
     {
-         $faker= Faker::create();
-         $count = DB::table('companies')->count();
+         $count = $company->count();
          if($count == 0) {
-         DB::table("companies")->insert([
-             "Name" => $faker->name(),
-             "location"=>$faker->address(),
+         $company->insert([
+             "name" => "Walkover",
+             "location"=>"Indore",
              "company_id"=>1,
          ]);
         }
 
-         $count = DB::table('users')->count();
+         $count = $user->count();
          if($count == 0) {
-         DB::table("users")->insert([
-             "Name" => $faker->name(),
-             "salary" => $faker->numerify('###'),
-             "password" =>bcrypt("12345678"),
-             "email"=>$faker->email(),
+         $user->insert([
+             "name" => "Shubham Paliwal",
+             "salary" => 2000000,
+             "password" =>bcrypt("shubham@123"),
+             "email"=>"shubham@gmail.com",
              "company_id"=>1,
          ]);
         }

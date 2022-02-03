@@ -14,29 +14,29 @@ class AuthController extends Controller
     protected $user;
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
-        $this->user =$this->guard()->user();
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->user = $this->guard()->user();
     }
-    
-    public function register(Request $request)
-    {  
+
+    public function register(Request $request, User $user)
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:2|max:100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:6',
-            'salary'=> 'required|integer|min:3',
+            'salary' => 'required|integer|min:3',
             'company_id' => 'exists:companies,id'
         ]);
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-        $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' =>Hash::make($request->password),
-                'salary'=>$request->salary,
-                'company_id'=>$request->company_id,
-            ]);
+        $user = $user->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'salary' => $request->salary,
+            'company_id' => $request->company_id,
+        ]);
         return response()->json([
             'message' => 'User successfully registered',
             'user' => $user
@@ -47,7 +47,7 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -58,10 +58,6 @@ class AuthController extends Controller
     {
         return response()->json(auth()->user());
     }
-
-    public function refresh(){
-        // return $this->respondWithToken($this->guard()->refresh());
-        }
 
     protected function respondWithToken($token)
     {

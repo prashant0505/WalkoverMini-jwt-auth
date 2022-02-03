@@ -13,7 +13,7 @@ class TagRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,17 +23,9 @@ class TagRequest extends FormRequest
      */
     public function rules()
     {
-        switch($this->method()) {
-            case 'POST':
-            return [
-                'Name' => 'required|string|min:2|max:100',
-                'user_id' => 'required|exists:Users,id',
-            ];
-            case 'PUT':
-                return [
-                    'Name' => 'required|string|min:2|max:100',
-                    'user_id' => 'required|exists:Users,id',
-                   ];    
-            }
+        return [
+            'name' => 'required|string|min:2|max:100',
+            'user_id' => 'required|exists:Users,id',
+        ];
     }
 }

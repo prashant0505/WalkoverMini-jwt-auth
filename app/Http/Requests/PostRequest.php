@@ -13,7 +13,7 @@ class PostRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,21 +23,11 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
-        switch($this->method()) {
-            case 'POST':
-            return [
-                'title' => 'required|string|min:2|max:100',
-                'body'=>'required|string|',
-                'user_id' => 'exists:users,id',
-                'category_id' => 'exists:categories,id'
-            ];
-            case 'PUT':
-                return [
-                    'title' => 'required|string|min:2|max:100',
-                    'body'=>'required|string|',
-                    'user_id' => 'exists:users,id',
-                    'category_id' => 'exists:categories,id'
-                   ];    
-        }
+        return [
+            'title' => 'required|string|min:2|max:100',
+            'body' => 'string',
+            'user_id' => 'exists:users,id',
+            'category_id' => 'exists:categories,id'
+        ];
     }
 }

@@ -13,7 +13,7 @@ class CategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,18 +23,9 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        switch($this->method()){
-            case 'Post' :
-                return [
-                    'Name' => 'required|string|min:2|max:100',
-                    'user_id' => 'exists:users,id'
-                ];
-            
-            case 'Put' :
-                return [
-                    'Name' => 'required|string|min:2|max:100',
-                    'user_id' => 'exists:users,id'
-                ];
-            }
+        return [
+            'name' => 'required|string|min:2|max:100',
+            'user_id' => 'exists:users,id'
+        ];
     }
 }
