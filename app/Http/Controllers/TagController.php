@@ -10,102 +10,38 @@ use App\Models\Tag;
 
 class TagController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function create(TagRequest $request, User $user)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(TagRequest $request,User $user)
-    {   
-       
-        $Tag = $user->tags()->create([
+        $tag = $user->tags()->create([
             'name' => $request->name,
-            //'user_id' => $request->userId,
-         
-            ]);
+        ]);
 
         return response()->json([
-            'message' => 'Tag created successfully ',
-            'user' => $Tag
+            'message' => 'Tag Created Successfully',
+            'user' => $tag
         ], 201);
-    
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function show(Tag $tag, $user_id, $id)
     {
-        //
+        return $tag->find($id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Tag  $Tag
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Tag $Tag,$userId,$id)
+    public function update(TagPatchRequest $request, User $user, $id)
     {
-        return $Tag->find($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Tag  $Tag
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tag $Tag)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Tag  $Tag
-     * @return \Illuminate\Http\Response
-     */
-    public function update(TagPatchRequest $request,User $user,$id)
-    {   
-       
-        $Tag = $user->tags()->where("id", $id)->update([
-            'Name' => $request->Name,
+        $tag = $user->tags()->where("id", $id)->update([
+            'name' => $request->name,
             'user_id' => $request->userId,
-                          ]);
-
+        ]);
         return response()->json([
-            'message' => 'Succesfully updated',
-            'user' => $Tag
+            'message' => 'Tag Updated Succesfully',
+            'user' => $tag
         ], 201);
-
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Tag  $Tag
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TagPatchRequest $request,User $user ,$userId,$id)
+    public function destroy(TagPatchRequest $request, User $user, $user_id, $id)
     {
-        $cat=$user->tags()->delete($id);
-
-        return response()->json("deleted"); 
+        $user->tags()->delete($id);
+        return response()->json("Tag Deleted");
     }
 }

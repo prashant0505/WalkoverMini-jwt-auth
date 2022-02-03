@@ -24,7 +24,7 @@ class AuthController extends Controller
             'name' => 'required|string|min:2|max:100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:6',
-            'salary' => 'required|integer|min:3',
+            'salary' => 'integer',
             'company_id' => 'exists:companies,id'
         ]);
         if ($validator->fails()) {
