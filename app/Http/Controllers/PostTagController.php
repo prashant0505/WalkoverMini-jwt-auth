@@ -2,43 +2,113 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Post_tag;
-use App\Models\Tag;
+use App\Models\Post_Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Validator;
+use Illuminate\Database\Eloquent\Builder;
+use Auth;
+use JWTAuth;
+use Hash;
+use App\Http\Requests\PostTagRequest;
+
 
 class PostTagController extends Controller
 {
-    public function index(Post_tag $post_tags)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Post_Tag $Post_Tag,$post_id)
     {
-        return $post_tags->all();
+       return Post_Tag::where('post_id',$post_id)->get();
     }
 
-    public function create(Request $request, Post $post)
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-        $user = $post->find($request->postId)->user_id;
-        $logUser = auth()->user();
-        if ($logUser->id != $user) {
-            return response()->json(['error' => "denied{userId}"]);
-        }
-        $PT = $post->create([
-            'post_id' => $request->post_id,
-            'tag_id' => $request->tag_id,
-        ]);
-        return response()->json([
-            'message' => 'Post-Tag Attached Successfully',
-            'company' => $PT
-        ], 201);
+        //
     }
 
-    public function destroy(Post_tag $post_tags, $postId, $tagId)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request,Post_Tag $Post_Tag  , posttagRequest $posttagRequest)
+    {   
+            $user = $Post_Tag->find($request->postId)->user_id;
+            $logUser = auth()->user();
+
+            if($logUser->id != $user){
+                return response()->json(['error'=>"denied{userId}"]);
+            }
+      
+            $tag=Post_Tag::create([
+            'post_id' => $request->postId,
+            'tag_id' => $request->tagId,
+            ]);
+            return response()->json([
+                'message' => 'tag inserted in post successfully ',
+                'company' => $tag
+            ], 201);
+        
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Post_Tag  $Post_Tag
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post_Tag $Post_Tag)
     {
-        $com = $post_tags->where("post_id", '=', $postId)->get()->Where(["tag_id", '=', $tagId]);
-        if ($com)
-            $com->each->delete();
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Post_Tag  $Post_Tag
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Post_Tag $Post_Tag)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Post_Tag  $Post_Tag
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Post_Tag $Post_Tag)
+    {
+        
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Post_Tag  $Post_Tag
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Post_Tag $Post_Tag,$postId,$tagId)
+    {
+        $com = $Post_Tag->where("post_id",'=', $postId)->get()->Where(["tag_id",'=', $tagId]);
+       
+        if($com)
+           $com->each->delete(); 
         else
             return response()->json("tag not used");
-        return response()->json("deleted");
+        return response()->json("deleted"); 
+
+    
     }
 }

@@ -2,72 +2,87 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryPatchRequest;
-use App\Http\Requests\CategoryRequest;
-use App\Models\Category;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Validator;
+use Illuminate\Database\Eloquent\Builder;
+use Auth;
+use JWTAuth;
+use Hash;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\CategoryPatchRequest;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
-
-    public function index(Category $category)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        return $category->all();
+        //
     }
 
-
-    public function store(CategoryRequest $request, Category $category)
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-        $logUser = auth()->user();
-        if ($logUser->id != $request->user_id) {
-            return response()->json(['error' => "denied{userId}"]);
-        }
-        $cat = $category->create([
-            'Name' => $request->Name,
-            'user_id' => $request->user_id,
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(CategoryRequest $request, User $user)
+    {
+        $cat = $user->categorys()->create([
+            'name' => $request->name,
+            //  'user_id'=>$request->user_id,
         ]);
         return response()->json([
-            'message' => 'Category successfully Created',
-            'category' => $cat
+            'message' => 'Category successfully created',
+            'Category' => $cat
         ], 201);
     }
 
-    public function show($userId_id, Category $category, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Category  $Category
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Category $Category, $userid, $id)
     {
-        return $category->find($id);
+        return $Category->find($id);
     }
 
-    public function update(CategoryPatchRequest $request, Category $category, $userId, $id)
+    public function update(CategoryPatchRequest $request, User $user, $id)
     {
-        $cat = $category->find($id);
-        $logUser = auth()->user();
-        if ($logUser->id != $cat->user_id) {
-            return response()->json(['error' => "cannot update to another users category"]);
-        }
-        $updatedCategory = $cat->where("id", $id)->update([
-            'Name' => $request->Name,
-            'user_id' => $request->user_id,
+        $cat = $user->categorys()->where('id', $id)->update([
+            'name' => $request->name,
         ]);
         return response()->json([
-            'message' => 'Category successfully Updated',
-            'category' => $updatedCategory
+            'message' => 'Category successfully updated',
+            'Category' => $cat
         ], 201);
     }
-
-    public function destroy(Category $category, $id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Category  $Category
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(CategoryRequest $request, User $user, $id)
     {
-        $cat = $category->find($id);
-        if ($cat) {
-            $cat->delete();
-            return response()->json([
-                'message' => 'Category destroyed successfully',
-            ], 201);
-        } else {
-            return response()->json([
-                'message' => 'Category does not exists',
-            ], 404);
-        }
+        $cat = $user->categorys()->delete($id);
+        return response()->json("deleted");
     }
 }

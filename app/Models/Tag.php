@@ -11,7 +11,7 @@ class Tag extends Model
     protected $guarded=[];
     public $timestamps=false;
 
-    public function user(){
+    public function users(){
         return $this->belongsTo(User::class);
     }
 

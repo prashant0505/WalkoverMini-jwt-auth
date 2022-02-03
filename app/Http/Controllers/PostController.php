@@ -2,29 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostPatchRequest;
-use App\Http\Requests\PostRequest;
-use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\PostRequest;
+use App\Http\Requests\PostPatchRequest;
+use App\Models\Post;
 
 class PostController extends Controller
 {
-    public function index(Post $post)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        return $post->all();
+        //
     }
 
-    public function store(PostRequest $request, Post $post, $userId)
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-        $logUser = auth()->user();
-        if ($logUser->id != $request->user_id) {
-            return response()->json(['error' => "denied{userId}"]);
-        }
-        $p = $post->create([
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(PostRequest $request, User $user)
+    {
+
+        $p = $user->posts()->create([
             'title' => $request->title,
             'body' => $request->body,
-            'user_id' => $request->user_id,
+            // 'user_id'=>$request->user_id,
             'category_id' => $request->category_id,
         ]);
         return response()->json([
@@ -33,42 +51,60 @@ class PostController extends Controller
         ], 201);
     }
 
-    public function show($user_id, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Post  $Post
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post $Post, $userid, $id)
     {
-        return Post::find($id);
+        return $Post->find($id);
     }
 
-    public function update(PostPatchRequest $request, Post $post, $userId, $id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Post  $Post
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Post $Post)
     {
-        $p = $post->find($id);
-        $logUser = auth()->user();
-        if ($logUser->id != $p->user_id) {
-            return response()->json(['error' => "cannot update to another users post"]);
-        }
-        $posted = $p->where("id", $id)->update([
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Post  $Post
+     * @return \Illuminate\Http\Response
+     */
+    public function updatestore(PostPatchRequest $request, User $user, $id)
+    {
+
+        $p = $user->posts()->where("id", $id)->update([
             'title' => $request->title,
             'body' => $request->body,
             'user_id' => $request->user_id,
             'category_id' => $request->category_id,
         ]);
         return response()->json([
-            'message' => 'Post successfully created',
-            'company' => $posted
+            'message' => 'Post successfully updated',
+            'Post' => $p
         ], 201);
     }
 
-    public function destroy(Post $post, $id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Post  $Post
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(PostPatchRequest $request, User $user, $id)
     {
-        $post = $post->find($id);
-        if ($post) {
-            $post->delete();
-            return response()->json([
-                'message' => 'Post destroyed successfully',
-            ], 201);
-        } else {
-            return response()->json([
-                'message' => 'Post does not exists',
-            ], 404);
-        }
+        $cat = $user->posts()->delete($id);
+
+        return response()->json("deleted");
     }
 }

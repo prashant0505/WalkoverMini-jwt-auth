@@ -22,23 +22,23 @@ class User extends Authenticatable implements JWTSubject
 
 
     //Relationships with user 
-    public function category(){
+    public function categories(){
         return $this->hasMany(Category::class);
     }
     
-    public function comment(){
+    public function comments(){
         return $this->hasMany(Comment::class);
     }
     
-    public function tag(){
+    public function tags(){
         return $this->hasMany(Tag::class);
     }
     
-    public function post(){
+    public function posts(){
         return $this->hasMany(Post::class);
     }
 
-    public function company(){
+    public function companies(){
         return $this->belongsTo(Company::class);
     }
 

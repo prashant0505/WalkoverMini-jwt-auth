@@ -24,7 +24,7 @@ class TagPatchRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|min:2|max:100',
+            'Name' => 'string|min:2|max:100',
             'userId' => 'exists:users,id',
         ];
     }

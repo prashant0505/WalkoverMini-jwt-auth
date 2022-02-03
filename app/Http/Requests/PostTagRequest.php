@@ -23,9 +23,11 @@ class PostTagRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'post_id' => 'exists:posts,id',
-            'tag_id' => 'exists:tags,id'
-        ];
+        
+            return [
+                'tagId' => 'required|exists:tags,id',
+                'postId' => 'required|exists:posts,id',
+            ];
+        
     }
 }

@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->integer('Salary');
+            $table->integer('salary');
             $table->string('password');
             $table->rememberToken();
             $table->foreignId('company_id')->constrained('companies');

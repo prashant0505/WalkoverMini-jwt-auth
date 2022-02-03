@@ -2,71 +2,110 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TagPatchRequest;
-use App\Http\Requests\TagRequest;
-use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\TagRequest;
+use App\Http\Requests\TagPatchRequest;
+use App\Models\Tag;
 
 class TagController extends Controller
 {
-    public function store(TagRequest $request, Tag $tag)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $logUser = auth()->user();
-        if ($logUser->id != $request->user_id) {
-            return response()->json(['error' => "denied"]);
-        }
-        $tag = $tag->create([
-            'Name' => $request->Name,
-            'user_id' => $request->userId,
+        //
+    }
 
-        ]);
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(TagRequest $request,User $user)
+    {   
+       
+        $Tag = $user->tags()->create([
+            'name' => $request->name,
+            //'user_id' => $request->userId,
+         
+            ]);
+
         return response()->json([
-            'message' => 'tag created successfully ',
-            'user' => $tag
+            'message' => 'Tag created successfully ',
+            'user' => $Tag
         ], 201);
+    
     }
 
-    public function show($user_id, Tag $tag, $id)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        return $tag->find($id);
+        //
     }
 
-    public function update(TagPatchRequest $request, Tag $tags, $userId, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Tag  $Tag
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Tag $Tag,$userId,$id)
     {
-        $tag = $tags->find($id);
-        $logUser = auth()->user();
-        if ($logUser->id != $tag->user_id) {
-            return response()->json(['error' => "cannot update to another users tag"]);
-        }
-        $tagged = $tag->where("id", $id)->update([
+        return $Tag->find($id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Tag  $Tag
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Tag $Tag)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Tag  $Tag
+     * @return \Illuminate\Http\Response
+     */
+    public function update(TagPatchRequest $request,User $user,$id)
+    {   
+       
+        $Tag = $user->tags()->where("id", $id)->update([
             'Name' => $request->Name,
             'user_id' => $request->userId,
-        ]);
+                          ]);
+
         return response()->json([
             'message' => 'Succesfully updated',
-            'Tag' => $tagged
+            'user' => $Tag
         ], 201);
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Tag  $Tag
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag, $id)
+    public function destroy(TagPatchRequest $request,User $user ,$userId,$id)
     {
-        $tag = $tag->find($id);
-        if ($tag) {
-            $tag->delete();
-            return response()->json([
-                'message' => 'Tag destroyed successfully',
-            ], 201);
-        } else {
-            return response()->json([
-                'message' => 'Tag does not exists',
-            ], 404);
-        }
+        $cat=$user->tags()->delete($id);
+
+        return response()->json("deleted"); 
     }
 }

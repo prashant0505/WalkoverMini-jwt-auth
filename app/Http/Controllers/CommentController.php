@@ -2,61 +2,111 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CommentPatchRequest;
-use App\Http\Requests\CommentRequest;
-use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Validator;
+use Illuminate\Database\Eloquent\Builder;
+use Auth;
+use JWTAuth;
+use Hash;
+use App\Http\Requests\CommentRequest;
+use App\Http\Requests\CommentPatchRequest;
+use App\Models\Comment;
 
 class CommentController extends Controller
 {
-    public function store(CommentRequest $request, Comment $comment)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $logUser = auth()->user();
-        if ($logUser->id != $request->user_id) {
-            return response()->json(['error' => "denied{userId}"]);
-        }
-        $comm = $comment->create([
-            'Body' => $request->body,
-            'user_id' => $request->user_id,
+        //
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(CommentRequest $request, User $user)
+    {
+
+        $comm = $user->comments()->create([
+            'body' => $request->body,
+            //  'user_id' => $request->userId,
             'post_id' => $request->post_id
+
         ]);
+
         return response()->json([
             'message' => 'Commented successfully ',
             'user' => $comm
         ], 201);
     }
 
-    public function show($user_id, $id, Comment $comment)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        return $comment->find($id);
     }
 
-    public function update(CommentPatchRequest $request, Comment $comment, $user_id, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Comment  $Comment
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Comment $Comment, $userid, $id)
     {
-        $comm = $comment->find($id);
-        $logUser = auth()->user();
-        if ($logUser->id != $comm->user_id) {
-            return response()->json(['error' => "cannot update comment of diff user"]);
-        }
-        $commented = $comm->where("id", $id)->update([
-            'body' => $request->body,
-            'user_id' => $request->user_id,
-            'post_id' => $request->post_id
+        return $Comment->find($id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Comment  $Comment
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Comment $Comment)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Comment  $Comment
+     * @return \Illuminate\Http\Response
+     */
+    public function update(CommentPatchRequest $request, User $user, $id)
+    {
+        $comm = $user->comments()->where("id", $id)->update([
+            'Body' => $request->body,
+            'user_id' => $request->userId,
+            'post_id' => $request->postId
         ]);
         return response()->json([
-            'message' => 'Comment Updated successfully ',
-            'Comment' => $commented
+            'message' => 'Succesfully updated',
+            'user' => $comm
         ], 201);
     }
-
-    public function destroy(Comment $comments, $id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Comment  $Comment
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(CommentPatchRequest $request, User $user, $id)
     {
-        $com = $comments->find($id);
-        if ($com)
-            $com->delete();
-        else
-            return response()->json("comment dosn't exist");
+        $cat = $user->comments()->delete($id);
         return response()->json("deleted");
     }
 }

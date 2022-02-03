@@ -13,7 +13,8 @@ class UserPatchRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $com =$this->company->id;
+        return (auth()->user()->company_id == $com);
     }
 
     /**

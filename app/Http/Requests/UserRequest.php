@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
-
 class UserRequest extends FormRequest
 {
     /**
@@ -15,7 +15,8 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $com =$this->company->id;
+        return (auth()->user()->company_id == $com);
     }
 
     /**
@@ -29,8 +30,7 @@ class UserRequest extends FormRequest
             'name' => 'required|string|min:2|max:100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:6',
-            'salary'=> 'required|integer|min:3',
-            'company_id' => 'exists:companies,id'
+            'salary' => 'required|integer|min:3',
         ];
     }
 }

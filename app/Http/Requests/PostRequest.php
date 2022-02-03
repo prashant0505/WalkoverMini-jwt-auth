@@ -13,7 +13,9 @@ class PostRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $com =$this->user->id;
+        
+        return (auth()->user()->id == $com);
     }
 
     /**
@@ -23,11 +25,13 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
+        
         return [
             'title' => 'required|string|min:2|max:100',
-            'body' => 'string',
-            'user_id' => 'exists:users,id',
-            'category_id' => 'exists:categories,id'
+            'body'=>'required|string|',
+           // 'user_id' => 'required|exists:users,id',
+            'category_id' => 'required|exists:categories,id'
         ];
+       
     }
 }

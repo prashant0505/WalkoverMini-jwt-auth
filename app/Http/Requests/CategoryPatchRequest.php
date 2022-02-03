@@ -13,7 +13,9 @@ class CategoryPatchRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $com =$this->user->id;
+        
+        return (auth()->user()->id == $com);
     }
 
     /**
@@ -24,8 +26,8 @@ class CategoryPatchRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|min:2|max:100',
-            'user_id' => 'exists:users,id'
+            'Name' => 'string|min:2|max:100',
+           // 'user_id' => 'exists:users,id'
         ];
     }
 }

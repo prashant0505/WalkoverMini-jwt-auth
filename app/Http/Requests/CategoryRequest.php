@@ -13,7 +13,9 @@ class CategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $com =$this->user->id;
+        
+        return (auth()->user()->id == $com);
     }
 
     /**
@@ -22,10 +24,11 @@ class CategoryRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
-        return [
-            'name' => 'required|string|min:2|max:100',
-            'user_id' => 'exists:users,id'
-        ];
+    {       return [
+                'Name' => 'required|string|min:2|max:100',
+                'user_id' => 'exists:users,id'
+            ];
+        
+      
     }
 }

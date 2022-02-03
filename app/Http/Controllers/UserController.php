@@ -2,71 +2,116 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserPatchRequest;
-use App\Http\Requests\UserRequest;
 use App\Models\User;
+use App\Models\company;
+
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserPatchRequest;
+use Faker\Provider\ar_EG\Company as Ar_EGCompany;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function create(UserRequest $request, User $user)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $logUser = auth()->user();
-        if ($logUser->company_id != $request->company_id) {
-            return response()->json(['error' => "cannot register to another company"]);
-        }
-        $logUser = auth()->user();
-        if ($logUser->company_id != $request->company_id) {
-            return response()->json(['error' => "Unauthorized to register in other company"]);
-        }
-        $user = $user->create([
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(UserRequest $request, Company $company)
+    {
+
+        $User = $company->Users()->create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'salary' => $request->salary,
-            'company_id' => $request->company_id,
+            // 'company_id'=>$companyId,
+
         ]);
+
         return response()->json([
             'message' => 'User successfully registered',
-            'user' => $user
+            'User' => $User
         ], 201);
     }
 
-    public function show($company, User $user, $id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\User  $User
+     * @return \Illuminate\Http\Response
+     */
+    public function show(User $User, $id)
     {
-        return $user->find($id);
+        return $User->find($id);
     }
 
-    public function update(UserPatchRequest $request, User $user, $companyId, $id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\User  $User
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $User)
     {
-        $us = $user->find($id);
+        //
+    }
 
-        $logUser = auth()->user();
-        if ($logUser->company_id != $us->company_id) {
-            return response()->json(['error' => "cannot update to another company"]);
-        }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $User
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UserPatchRequest $request, Company $company, $id)
+    {
 
-        $us->where("id", $id)->update([
+        $User = $company->users()->where("id", $id)->update([
             'Name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'salary' => $request->salary
+            'salary' => $request->salary,
         ]);
+
         return response()->json([
             'message' => 'User successfully updated',
-            'user' => $us
+            'User' => $User
         ], 201);
     }
 
-    public function destroy(User $user, $companyId, $id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\User  $User
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(UserPatchRequest $request, Company $company, $id)
     {
-        $use = $user->find($id);
-        if ($use)
-            $use->delete();
-        else
-            return response()->json("User dosn't exist");
-        return response()->json("delete");
+        $cat = $company->Users()->delete($id);
+
+        return response()->json("deleted");
     }
 }

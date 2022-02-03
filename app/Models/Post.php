@@ -13,19 +13,15 @@ class Post extends Model
 
     // Relationships 
     
-    public function comment(){
+    public function comments(){
         return $this->hasMany(Comment::class);
     }
     
-    public function tag(){
-        return $this->hasMany(Tag::class);
-    }
-    
-    public function user(){
+    public function users(){
         return $this->belongsTo(User::class);
     }
 
-    public function category(){
+    public function categories(){
         return $this->belongsTo(Category::class);
     }
     

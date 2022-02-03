@@ -13,7 +13,9 @@ class CompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+
+        $com =$this->company_id;
+        return (auth()->user()->id == $com);
     }
 
     /**
@@ -22,12 +24,13 @@ class CompanyRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
-        
+    {  
         return [
             'name' => 'required|string|min:2|max:100',
             'location'=>'required|string|min:3',
-            'company_id' => 'exists:companies,id'
-        ];    
+            'company_id' => 'required|exists:companies,id'
+       
+        ];
+        
     }
 }

@@ -13,7 +13,9 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $com =$this->user->id;
+        
+        return (auth()->user()->id == $com);
     }
 
     /**
@@ -23,10 +25,12 @@ class CommentRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'body' => 'required|string|min:2|max:100',
-            'user_id' => 'required|exists:users,id',
-            'post_id' => 'required|exists:posts,id'
-        ];
+                return [
+                    'body' => 'required|string|min:2|max:100',
+                   // 'user_id' => 'required|exists:users,id',
+                    'post_id' => 'required|exists:posts,id'
+                ];
+            
+            
     }
 }
