@@ -10,4 +10,13 @@ class Category extends Model
     use HasFactory;
     protected $guarded=[];
     public $timestamps=false;
+
+    // Relationships
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    
+    public function post(){
+        return $this->hasMany(Post::class);
+    }
 }

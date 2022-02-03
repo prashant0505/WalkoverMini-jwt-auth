@@ -20,6 +20,30 @@ class User extends Authenticatable implements JWTSubject
     protected $guarded=[];
     public $timestamps = false;
 
+
+    //Relationships with user 
+    public function category(){
+        return $this->hasMany(Category::class);
+    }
+    
+    public function comment(){
+        return $this->hasMany(Comment::class);
+    }
+    
+    public function tag(){
+        return $this->hasMany(Tag::class);
+    }
+    
+    public function post(){
+        return $this->hasMany(Post::class);
+    }
+
+    public function company(){
+        return $this->belongsTo(Company::class);
+    }
+
+
+
     protected $fillable = [
         'name',
         'email',

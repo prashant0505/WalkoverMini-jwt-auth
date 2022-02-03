@@ -10,4 +10,26 @@ class Post extends Model
     use HasFactory;
     protected $guarded=[];
     public $timestamps = false;
+
+    // Relationships 
+    
+    public function comment(){
+        return $this->hasMany(Comment::class);
+    }
+    
+    public function tag(){
+        return $this->hasMany(Tag::class);
+    }
+    
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+    
+    public function tags(){
+        return $this->belongsToMany(Tag::class,'post_tags');
+    }
 }

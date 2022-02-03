@@ -10,4 +10,12 @@ class Tag extends Model
     use HasFactory;
     protected $guarded=[];
     public $timestamps=false;
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function posts(){
+        return $this->belongsToMany(Post::class,'post_tags');
+    }
 }

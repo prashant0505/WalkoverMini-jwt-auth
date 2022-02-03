@@ -10,4 +10,17 @@ class Company extends Model
     use HasFactory;
     protected $guarded=[];
     public $timestamps = false;
+
+    // Relationships
+    public function user(){
+        return $this->hasMany(User::class);
+    }
+
+    public function parent(){
+        return $this->hasMany(Company::class,'company_id');
+    }
+    
+    public function children(){
+        return $this->belongsTo(Company::class,'company_id');
+    }
 }
