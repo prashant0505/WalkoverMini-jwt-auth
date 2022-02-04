@@ -35,11 +35,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 // Routes for Company
     Route::get('/companies', [CompanyController::class, 'index']);
     Route::get('/companies/{company}', [CompanyController::class, 'show']);
+    Route::get('/companies/{company}/companies', [CompanyController::class, 'companiesUnder']);
     Route::post('/companies/{company}/companies', [CompanyController::class, 'store']);             // company under company
     Route::patch('/companies/{company}', [CompanyController::class, 'update']);
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
-
-    Route::get('/companiesUnder/{company}', [CompanyController::class, 'companiesUnder']);
 
 
 

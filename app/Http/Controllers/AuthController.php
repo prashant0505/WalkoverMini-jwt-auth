@@ -2,14 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterAuthRequest;
-use App\Models\Company;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\LoginAuthRequest;
 
 class AuthController extends Controller
 {
@@ -20,22 +15,7 @@ class AuthController extends Controller
         $this->user = $this->guard()->user();
     }
 
-    public function register(RegisterAuthRequest $request, Company $company)
-    {
-        $user = $company->users()->create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'salary' => $request->salary,
-            'company_id' => $request->company_id,
-        ]);
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
-    }
-
-    public function login()
+    public function login(LoginAuthRequest $request)
     {
         $credentials = request(['email', 'password']);
 
@@ -62,7 +42,6 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            // 'expires_in' => auth()->factory()->getTTL() * 60 
         ]);
     }
 
