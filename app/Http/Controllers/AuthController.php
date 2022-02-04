@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterAuthRequest;
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,19 +20,9 @@ class AuthController extends Controller
         $this->user = $this->guard()->user();
     }
 
-    public function register(Request $request, User $user)
+    public function register(RegisterAuthRequest $request, Company $company)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:2|max:100',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:6',
-            'salary' => 'integer',
-            'company_id' => 'exists:companies,id'
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-        $user = $user->create([
+        $user = $company->users()->create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -48,7 +40,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Invalid Credientials'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -57,6 +49,12 @@ class AuthController extends Controller
     public function profile()
     {
         return response()->json(auth()->user());
+    }
+    
+    public function logout()
+    {
+        auth()->logout();
+        return response()->json(['message' => 'User successfully logged out.']);
     }
 
     protected function respondWithToken($token)

@@ -21,26 +21,48 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::group([
-
-    'prefix' => 'auth'
-
-], function () {
+Route::group(['prefix' => 'auth'], function () {
 
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('profile', [AuthController::class, 'profile']);
+
 });
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 
-    // Routes for Company
-    Route::get('/companies/{id}', [CompanyController::class, 'show']);
-    Route::post('/companies', [CompanyController::class, 'store']);
-    Route::patch('/companies/{id}', [CompanyController::class, 'update']);
-    Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('profile', [AuthController::class, 'profile']);
+
+// Routes for Company
+    Route::get('/companies', [CompanyController::class, 'index']);
+    Route::get('/companies/{company}', [CompanyController::class, 'show']);
+    Route::post('/companies/{company}/companies', [CompanyController::class, 'store']);             // company under company
+    Route::patch('/companies/{company}', [CompanyController::class, 'update']);
+    Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
+
+    Route::get('/companiesUnder/{company}', [CompanyController::class, 'companiesUnder']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Routes for users
     Route::get('/companies/{company}/users/{id}', [UserController::class, 'show']);

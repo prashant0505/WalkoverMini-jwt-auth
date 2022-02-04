@@ -15,7 +15,7 @@ class CompanySeeder extends Seeder
      *
      * @return void
      */
-    public function run(Company $company, User $user)
+    public function run(Company $company)
 
     {
         $count = $company->count();
@@ -23,18 +23,6 @@ class CompanySeeder extends Seeder
             $company->insert([
                 "name" => "Walkover",
                 "location" => "Indore",
-                "company_id" => 1,
-            ]);
-        }
-
-        $count = $user->count();
-        if ($count == 0) {
-            $user->insert([
-                "name" => "Shubham Paliwal",
-                "salary" => 2000000,
-                "password" => bcrypt("shubham@123"),
-                "email" => "shubham@gmail.com",
-                "company_id" => 1,
             ]);
         }
     }
