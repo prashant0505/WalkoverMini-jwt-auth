@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostTagRequest extends FormRequest
+class PostTagDeleteRequest extends FormRequest
 {
     public function authorize()
     {
@@ -15,8 +15,7 @@ class PostTagRequest extends FormRequest
     public function rules()
     {
         return [
-            'tag_id' => 'required|exists:tags,id',
-            'post_id' => 'required|exists:posts,id',
+            
         ];
     }
 }

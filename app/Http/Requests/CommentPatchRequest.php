@@ -8,7 +8,8 @@ class CommentPatchRequest extends FormRequest
 {
     public function authorize()
     {
-        return true;
+        $compare = $this->user->id;
+        return (auth()->user()->id == $compare);
     }
 
     public function rules()
