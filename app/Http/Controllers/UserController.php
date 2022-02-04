@@ -46,7 +46,7 @@ class UserController extends Controller
 
     public function destroy(UserPatchRequest $request, Company $company, $id)
     {
-        $company->Users()->delete($id);
+        $company->users()->find($id)->delete();
         return response()->json("User Deleted");
     }
 }

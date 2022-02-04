@@ -19,9 +19,9 @@ class CategoryController extends Controller
         ], 201);
     }
 
-    public function show(Category $Category, $userid, $id)
+    public function show(Category $category, $userid, $id)
     {
-        return $Category->find($id);
+        return $category->find($id);
     }
 
     public function update(CategoryPatchRequest $request, User $user, $id)
@@ -37,7 +37,7 @@ class CategoryController extends Controller
 
     public function destroy(CategoryRequest $request, User $user, $id)
     {
-        $user->categories()->delete($id);
+        $user->categories()->find($id)->delete();
         return response()->json("Category deleted Successfully");
     }
 }

@@ -43,7 +43,7 @@ class PostController extends Controller
 
     public function destroy(PostPatchRequest $request, User $user, $id)
     {
-        $user->posts()->delete($id);
+        $user->posts()->find($id)->delete();
         return response()->json("Post Deleted");
     }
 }

@@ -40,7 +40,7 @@ class CompanyController extends Controller
     
     public function destroy(CompanyPatchRequest $CompPatchrequest, Company $company, $id)
     {
-        $company->delete($id);
+        $company->find($id)->delete();
         return response()->json("Company Deleted");
     }
 }
