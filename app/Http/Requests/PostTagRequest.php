@@ -16,7 +16,6 @@ class PostTagRequest extends FormRequest
     {
         return [
             'tag_id' => 'required|exists:tags,id',
-            'post_id' => 'required|exists:posts,id',
         ];
     }
 }

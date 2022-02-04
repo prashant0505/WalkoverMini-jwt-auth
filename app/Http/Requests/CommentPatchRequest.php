@@ -16,7 +16,6 @@ class CommentPatchRequest extends FormRequest
     {
         return [
             'body' => 'string|min:2|max:100',
-            'user_id' => 'exists:users,id',
             'post_id' => 'exists:posts,id'
         ];
     }

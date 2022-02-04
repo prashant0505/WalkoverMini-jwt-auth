@@ -16,9 +16,7 @@ class CompanyRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:100',
-            'location' => 'required|string|min:3',
-            'company_id' => 'required|exists:companies,id'
-
+            'location' => 'required|string|min:3'
         ];
     }
 }

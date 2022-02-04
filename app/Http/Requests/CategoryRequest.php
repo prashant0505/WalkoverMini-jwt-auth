@@ -16,7 +16,6 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:100',
-            'user_id' => 'exists:users,id'
         ];
     }
 }
