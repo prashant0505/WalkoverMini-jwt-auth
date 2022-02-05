@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteCompanyRequest extends FormRequest
+class IndexCompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class DeleteCompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        return (auth()->user()->id == $this->company->users()->first()->id);
+        return true;
     }
 
     /**

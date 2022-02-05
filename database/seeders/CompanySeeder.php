@@ -20,7 +20,7 @@ class CompanySeeder extends Seeder
     {
         $count = $company->count();
         if ($count == 0) {
-            $company->insert([
+            $company->create([
                 "name" => "Walkover",
                 "location" => "Indore",
             ]);

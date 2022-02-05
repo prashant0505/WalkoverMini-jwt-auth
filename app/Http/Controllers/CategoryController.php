@@ -2,13 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeleteCategoryRequest;
+use App\Http\Requests\IndexCategoryRequest;
+use App\Http\Requests\ShowCategoryRequest;
 use App\Models\User;
-use App\Http\Requests\CategoryRequest;
-use App\Http\Requests\CategoryPatchRequest;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+
 class CategoryController extends Controller
 {
-    public function store(CategoryRequest $request, User $user)
+    public function index(IndexCategoryRequest $request, User $user, Category $category)
+    {
+        return $category;
+    }
+
+    public function show(ShowCategoryRequest $category, User $user)
+    {
+        return $user->categories()->get();
+    }
+
+    public function store(StoreCategoryRequest $request, User $user)
     {
         $category = $user->categories()->create([
             'name' => $request->name,
@@ -19,25 +33,18 @@ class CategoryController extends Controller
         ], 201);
     }
 
-    public function show(Category $category, $userid, $id)
+    public function update(UpdateCategoryRequest $request, User $user, Category $category)
     {
-        return $category->find($id);
-    }
-
-    public function update(CategoryPatchRequest $request, User $user, $id)
-    {
-        $category = $user->categories()->where('id', $id)->update([
-            'name' => $request->name,
-        ]);
+        $updated = $category->update($request->all());
         return response()->json([
             'message' => 'Category Created Updated',
-            'Category' => $category
+            'Category' => $updated
         ], 201);
     }
 
-    public function destroy(CategoryRequest $request, User $user, $id)
+    public function destroy(DeleteCategoryRequest $request, User $user, Category $category)
     {
-        $user->categories()->find($id)->delete();
-        return response()->json("Category deleted Successfully");
+        if($category->delete())
+        return response()->json("Category Deleted Successfully");
     }
 }

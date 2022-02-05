@@ -7,12 +7,11 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
-class UserRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     public function authorize()
     {
-        $compare = $this->company->id;
-        return (auth()->user()->company_id == $compare);
+        return (auth()->user()->id == $this->company->users()->first()->id);
     }
 
     public function rules()

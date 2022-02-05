@@ -24,7 +24,6 @@ use App\Http\Controllers\UserController;
 Route::group(['prefix' => 'auth'], function () {
 
     Route::post('login', [AuthController::class, 'login']);
-
 });
 
 Route::group(['middleware' => ['jwt.verify']], function () {
@@ -32,42 +31,19 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('profile', [AuthController::class, 'profile']);
 
-// Routes for Company
+    // Routes for Company
     Route::get('/companies', [CompanyController::class, 'index']);
     Route::get('/companies/{company}', [CompanyController::class, 'show']);
-    Route::get('/companies/{company}/companies', [CompanyController::class, 'companiesUnder']);
-    Route::post('/companies/{company}/companies', [CompanyController::class, 'store']);             // company under company
+    Route::post('/companies', [CompanyController::class, 'store']);
     Route::patch('/companies/{company}', [CompanyController::class, 'update']);
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Routes for users
-    Route::get('/companies/{company}/users/{id}', [UserController::class, 'show']);
+    // Routes for user
+    Route::get('/companies/{company}/users', [UserController::class, 'index']);
+    Route::get('/companies/{company}/users/{user}', [UserController::class, 'show']);
     Route::post('/companies/{company}/users', [UserController::class, 'store']);
-    Route::patch('/companies/{company}/users/{id}', [UserController::class, 'update']);
-    Route::delete('/companies/{company}/users/{id}', [UserController::class, 'destroy']);
+    Route::patch('/companies/{company}/users/{user}', [UserController::class, 'update']);
+    Route::delete('/companies/{company}/users/{user}', [UserController::class, 'destroy']);
 
     // Routes for Post
     Route::get('/users/{user}/posts/{id}', [PostController::class, 'show']);

@@ -1,36 +1,29 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Requests\DeleteCompanyRequest;
-use App\Http\Requests\GetAllCompanyRequest;
-use App\Http\Requests\GetCompanyRequest;
+use App\Http\Requests\IndexCompanyRequest;
+use App\Http\Requests\ShowCompanyRequest;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
-    public function index(GetAllCompanyRequest $request, Company $company)
+    public function index(IndexCompanyRequest $request)
     {
-        return $company->all();
+        $company = Company::find(Auth::user()->company_id);
+        return $company->with('children')->where('id', $company->id)->get();   //orWhere('company_id',$company->id)->
+
     }
 
-    public function store(StoreCompanyRequest $request, Company $company)
+    public function store(StoreCompanyRequest $request)
     {
-        $company = $company->children()->create([
+        $company = Company::find(Auth::user()->company_id)->children()->create([
             'name' => $request->name,
             'location' => $request->location,
         ]);
-
-        $userid = $company->id;
-        $company->users()->create(([
-            "name" => $request->name . "Admin",
-            "salary" => 0,
-            "password" => bcrypt("Admin@123"),
-            "email" => $request->name . "Admin@gmail.com",
-            "company_id" => $userid,
-        ]));
 
         return response()->json([
             'message' => 'Company Created Succesfully ',
@@ -38,22 +31,17 @@ class CompanyController extends Controller
         ], 201);
     }
 
-    public function show(GetCompanyRequest $request, Company $company)
+    public function show(ShowCompanyRequest $request, Company $company)
     {
         return $company;
     }
 
-    public function companiesUnder(GetCompanyRequest $request, Company $company)
-    {
-        return $company->with('children')->where('id', $company->id)->get();
-    }
-
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $com = $company->update($request->all());
+        $updated = $company->update($request->all());
         return response()->json([
             'message' => 'Company Updated Successfully',
-            'Company' => $com
+            'Company' => $updated
         ], 201);
     }
 
@@ -62,7 +50,5 @@ class CompanyController extends Controller
         $flag = $company->delete();
         if ($flag)
             return response()->json("Company Deleted");
-        else
-            return response()->json("Company cannot be Deleted");
     }
 }
