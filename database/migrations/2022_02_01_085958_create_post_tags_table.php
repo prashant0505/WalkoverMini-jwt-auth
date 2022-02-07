@@ -16,6 +16,7 @@ class CreatePostTagsTable extends Migration
         Schema::create('post_tags', function (Blueprint $table) {
             $table->foreignId('post_id')->constrained('posts');
             $table->foreignId('tag_id')->constrained('tags');
+            $table->softDeletes();
         });
     }
 

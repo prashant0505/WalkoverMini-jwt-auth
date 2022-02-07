@@ -53,17 +53,17 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     // Routes for Category
     Route::get('/users/{user}/categories', [CategoryController::class, 'index']);
-    Route::get('/users/{user}/categories/{id}', [CategoryController::class, 'show']);
+    Route::get('/users/{user}/categories/{category}', [CategoryController::class, 'show']);
     Route::post('/users/{user}/categories', [CategoryController::class, 'store']);
-    Route::patch('/users/{user}/categories/{id}', [CategoryController::class, 'update']);
-    Route::delete('/users/{user}/categories/{id}', [CategoryController::class, 'destroy']);
+    Route::patch('/users/{user}/categories/{category}', [CategoryController::class, 'update']);
+    Route::delete('/users/{user}/categories/{category}', [CategoryController::class, 'destroy']);
 
     // Routes for Tag
     Route::get('/users/{user}/tags', [TagController::class, 'index']);
-    Route::get('/users/{user}/tags/{id}', [TagController::class, 'show']);
+    Route::get('/users/{user}/tags/{tag}', [TagController::class, 'show']);
     Route::post('/users/{user}/tags', [TagController::class, 'create']);
-    Route::patch('/users/{user}/tags/{id}', [TagController::class, 'update']);
-    Route::delete('/users/{user}/tags/{id}', [TagController::class, 'destroy']);
+    Route::patch('/users/{user}/tags/{tag}', [TagController::class, 'update']);
+    Route::delete('/users/{user}/tags/{tag}', [TagController::class, 'destroy']);
 
     // Routes for Comment
     Route::get('/users/{user}/comments', [CommentController::class, 'index']);

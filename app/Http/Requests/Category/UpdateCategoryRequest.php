@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -8,8 +8,7 @@ class UpdateCategoryRequest extends FormRequest
 {
     public function authorize()
     {
-        $compare = $this->user->id;
-        return (auth()->user()->id == $compare);
+        return (auth()->user()->id == $this->category->user_id);
     }
 
     public function rules()

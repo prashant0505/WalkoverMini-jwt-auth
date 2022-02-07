@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TagRequest extends FormRequest
+class StoreCategoryRequest extends FormRequest
 {
     public function authorize()
     {
-        $compare = $this->user->id;
-        return (auth()->user()->id == $compare);
+        return (auth()->user()->id == $this->user->id);
     }
 
     public function rules()

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\company;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShowCompanyRequest extends FormRequest
+class DeleteCompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,8 +13,7 @@ class ShowCompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        $compare = $this->company->id;
-        return (auth()->user()->company_id == $compare);
+        return (auth()->user()->id == $this->company->users()->first()->id);
     }
 
     /**

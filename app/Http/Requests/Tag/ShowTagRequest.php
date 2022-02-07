@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Tag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexCompanyRequest extends FormRequest
+class ShowTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class IndexCompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return (auth()->user()->id == $this->user->id);
     }
 
     /**
@@ -24,7 +24,7 @@ class IndexCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            
+            //
         ];
     }
 }

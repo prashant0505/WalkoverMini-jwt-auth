@@ -19,6 +19,7 @@ class CreatePostsTable extends Migration
             $table->text('body');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('category_id')->constrained('categories');
+            $table->softDeletes();
         });
     }
 

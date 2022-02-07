@@ -18,8 +18,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $guarded=[];
     use SoftDeletes;
+    protected $guarded=[];
     public $timestamps = false;
 
 

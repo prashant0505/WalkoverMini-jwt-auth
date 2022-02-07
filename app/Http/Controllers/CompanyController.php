@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Requests\DeleteCompanyRequest;
-use App\Http\Requests\IndexCompanyRequest;
-use App\Http\Requests\ShowCompanyRequest;
-use App\Http\Requests\StoreCompanyRequest;
-use App\Http\Requests\UpdateCompanyRequest;
+
+use App\Http\Requests\company\DeleteCompanyRequest;
+use App\Http\Requests\company\IndexCompanyRequest ;
+use App\Http\Requests\company\ShowCompanyRequest;
+use App\Http\Requests\company\StoreCompanyRequest;
+use App\Http\Requests\company\UpdateCompanyRequest;
 use App\Models\Company;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,7 +39,7 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $updated = $company->update($request->all());
+        $updated = $company->update(array_filter($request->all()));
         return response()->json([
             'message' => 'Company Updated Successfully',
             'Company' => $updated

@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('user_id')->constrained('users');
+            $table->softDeletes();
         });
     }
 

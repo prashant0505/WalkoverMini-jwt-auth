@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Tag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteCompanyRequest extends FormRequest
+class DeleteTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class DeleteCompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        return (auth()->user()->id == $this->company->users()->first()->id);
+        return (auth()->user()->id == $this->tag->user_id);
     }
 
     /**
@@ -24,7 +24,7 @@ class DeleteCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            
+            //
         ];
     }
 }

@@ -18,6 +18,7 @@ class CreateCommentsTable extends Migration
             $table->text('body');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('post_id')->constrained('posts');
+            $table->softDeletes();
         });
     }
 

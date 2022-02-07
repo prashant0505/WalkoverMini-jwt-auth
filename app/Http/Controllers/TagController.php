@@ -2,15 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Tag\DeleteTagRequest;
+use App\Http\Requests\Tag\IndexTagRequest;
+use App\Http\Requests\Tag\ShowTagRequest;
+use App\Http\Requests\Tag\StoreTagRequest;
+use App\Http\Requests\Tag\UpdateTagRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Requests\TagRequest;
-use App\Http\Requests\TagPatchRequest;
 use App\Models\Tag;
 
 class TagController extends Controller
 {
-    public function create(TagRequest $request, User $user)
+    public function index(IndexTagRequest $request, User $user)
+    {
+        return $user->tags()->get();
+    }
+
+    public function show(ShowTagRequest $request, User $user, Tag $tag)
+    {
+        return $tag;
+    }
+
+    public function create(StoreTagRequest $request, User $user)
     {
         $tag = $user->tags()->create([
             'name' => $request->name,
@@ -22,26 +34,18 @@ class TagController extends Controller
         ], 201);
     }
 
-    public function show(Tag $tag, $user_id, $id)
+    public function update(UpdateTagRequest $request, User $user, Tag $tag)
     {
-        return $tag->find($id);
-    }
-
-    public function update(TagPatchRequest $request, User $user, $id)
-    {
-        $tag = $user->tags()->where("id", $id)->update([
-            'name' => $request->name,
-            'user_id' => $request->userId,
-        ]);
+        $tag = $tag->update(array_filter($request->all()));
         return response()->json([
             'message' => 'Tag Updated Succesfully',
             'user' => $tag
         ], 201);
     }
 
-    public function destroy(TagPatchRequest $request, User $user, $user_id, $id)
+    public function destroy(DeleteTagRequest $request, User $user, Tag $tag)
     {
-        $user->tags()->find($id)->delete();
+        if($tag->delete())
         return response()->json("Tag Deleted");
     }
 }

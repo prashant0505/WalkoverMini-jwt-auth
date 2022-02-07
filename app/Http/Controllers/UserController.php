@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DeleteUserRequest;
-use App\Http\Requests\IndexUserRequest;
-use App\Http\Requests\ShowUserRequest;
+use App\Http\Requests\User\DeleteUserRequest;
+use App\Http\Requests\User\IndexUserRequest;
+use App\Http\Requests\User\ShowUserRequest;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Company;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function index(IndexUserRequest $request, Company $company)
+    {
+        return $company->users()->get();
+    }
 
     public function show(ShowUserRequest $request, Company $company, User $user)
     {
         return $user;
-    }
-
-    public function index(IndexUserRequest $request, Company $company)
-    {
-        return $company->users()->get();
     }
 
     public function store(StoreUserRequest $request, Company $company)

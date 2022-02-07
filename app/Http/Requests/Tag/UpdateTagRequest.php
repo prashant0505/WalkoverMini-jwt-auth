@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Tag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TagPatchRequest extends FormRequest
+class UpdateTagRequest extends FormRequest
 {
     public function authorize()
     {
-        $compare = $this->user->id;
-        return (auth()->user()->id == $compare);
+        return (auth()->user()->id == $this->tag->user_id);
     }
 
     public function rules()
