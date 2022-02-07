@@ -8,7 +8,7 @@ class DeletePostTagRequest extends FormRequest
 {
     public function authorize()
     {
-        return (auth()->user()->id == $this->user->id);
+        return (auth()->user()->id == $this->post->user_id);
     }
 
     public function rules()

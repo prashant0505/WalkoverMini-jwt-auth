@@ -13,8 +13,7 @@ class ShowCompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        dd($this->user->company_id);
-        // return (auth()->user()->company_id == $this->user->company_id);
+        return (auth()->user()->company_id == $this->company->id);
     }
 
     /**

@@ -39,18 +39,17 @@ class PostTagController extends Controller
             ], 201);
     }
     
-    // public function update(UpdatePostTagRequest $request, Post $post ,Tag $tag)
-    // {
-    //     $posttag = $post->tags()->dettach($request->tag_id);
-    //         return response()->json([
-    //             'message' => 'Tag used in Post successfully ',
-    //             'PostTag' => $posttag
-    //         ], 201);
-    // }
-
-    public function destroy(DeletePostTagRequest $request, Post $post)
+    public function update(UpdatePostTagRequest $request, Post $post ,Tag $tag)
     {
-        $posttag = $post->tags()->detach($request->tag_id);
+        $posttag = $post->tags()->attach(['tag_id' => $request->tag_id,]);
+            return response()->json([
+                'message' => 'Tag used in Post successfully ',
+                'PostTag' => $posttag], 201);
+    }
+
+    public function destroy(DeletePostTagRequest $request, Post $post,Tag $tag)
+    {
+        $posttag = $post->tags()->detach($tag);
             return response()->json([
                 'message' => 'Tag removed from Post successfully ',
                 'PostTag' => $posttag
