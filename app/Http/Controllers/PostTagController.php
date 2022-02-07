@@ -2,37 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Post\IndexPostRequest;
+use App\Http\Requests\PostTag\DeletePostTagRequest;
+use App\Http\Requests\PostTag\IndexPostTagRequest;
+use App\Http\Requests\PostTag\ShowPostTagRequest;
+use App\Http\Requests\PostTag\StorePostTagRequest;
 use App\Http\Requests\PostTagDeleteRequest;
 use App\Models\Post_Tag;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostTagRequest;
 use App\Models\Post;
+use App\Models\Tag;
+use App\Models\User;
 
 class PostTagController extends Controller
 {
-    public function index(Post_Tag $Post_Tag, $post_id)
+    public function index(IndexPostTagRequest $request, Post $post)
     {
-        return Post_Tag::where('post_id', $post_id)->get();
+        return $post->tags()->get();
+    }
+    
+    public function show(ShowPostTagRequest $request, Tag $tag)
+    {
+        return $tag->posts()->get();
     }
 
-    public function store(PostTagRequest $request, Post $post)
+    public function store(StorePostTagRequest $request, Post $post)
     {
-        $posttag = $post->tags()->create([
-            'tag_id' => $request->tagId,
+        $posttag = $post->tags()->attach([
+            'tag_id' => $request->tag_id,
             ]);
             return response()->json([
-                'message' => 'tag inserted in post successfully ',
-                'company' => $posttag
+                'message' => 'Tag used in Post successfully ',
+                'PostTag' => $posttag
             ], 201);
     }
 
-    public function destroy(PostTagDeleteRequest $request, Post $post, $tagId)
+    public function destroy(DeletePostTagRequest $request, Post $post)
     {
-        $com = $post->tags()->Where(["tag_id",'=', $tagId])->get();
-        if($com)
-           $com->each->delete();
-        else
-            return response()->json("tag not used");
-        return response()->json("deleted");
+        $posttag = $post->tags()->detach($request->tag_id);
+            return response()->json([
+                'message' => 'Tag removed from Post successfully ',
+                'PostTag' => $posttag
+            ], 201);
     }
-}
+ }

@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostPatchRequest extends FormRequest
+class UpdatePostRequest extends FormRequest
 {
     public function authorize()
     {
-        $compare = $this->user->id;
-        return (auth()->user()->id == $compare);
+        return (auth()->user()->id == $this->post->user_id);
     }
-
 
     public function rules()
     {

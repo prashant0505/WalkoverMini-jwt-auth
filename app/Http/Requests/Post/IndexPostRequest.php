@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginAuthRequest extends FormRequest
+class IndexPostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class LoginAuthRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return (auth()->user()->company_id == $this->user->company_id);
     }
 
     /**
@@ -24,8 +24,7 @@ class LoginAuthRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
+            //
         ];
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\PostTag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostTagRequest extends FormRequest
+class StorePostTagRequest extends FormRequest
 {
     public function authorize()
     {

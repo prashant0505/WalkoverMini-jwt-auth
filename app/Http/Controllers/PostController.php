@@ -3,47 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Http\Requests\PostRequest;
-use App\Http\Requests\PostPatchRequest;
 use App\Models\Post;
+use App\Http\Requests\Post\StorePostRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
+use App\Http\Requests\Post\DeletePostRequest;
+use App\Http\Requests\Post\ShowPostRequest;
+use App\Http\Requests\Post\IndexPostRequest;
 
 class PostController extends Controller
 {
-    public function store(PostRequest $request, User $user)
+    public function index(IndexPostRequest $request, User $user)
     {
-        $post = $user->posts()->create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'category_id' => $request->category_id,
-        ]);
+        return $user->posts()->get();
+    }
+    
+    public function show(ShowPostRequest $request, User $user, Post $post)
+    {
+        return $post;
+    }
+
+    public function store(StorePostRequest $request, User $user)
+    {
+        $post = $user->posts()->create(array_filter($request->all()));
         return response()->json([
-            'message' => 'Post Created Successfully',
-            'company' => $post
-        ], 201);
+            'message' => 'Post successfully created', 
+            'Post' => $post], 201);
     }
 
-    public function show(Post $post, $userid, $id)
+    public function update(UpdatePostRequest $request, User $user, Post $post)
     {
-        return $post->find($id);
-    }
-
-    public function updatestore(PostPatchRequest $request, User $user, $id)
-    {
-        $post = $user->posts()->where("id", $id)->update([
-            'title' => $request->title,
-            'body' => $request->body,
-            'user_id' => $request->user_id,
-            'category_id' => $request->category_id,
-        ]);
+        $updated = $post->update(array_filter($request->all()));
         return response()->json([
-            'message' => 'Post Updated Sucessfully',
-            'Post' => $post
-        ], 201);
+            'message' => 'Post successfully updated', 
+            'Post' => $updated], 201);
     }
 
-    public function destroy(PostPatchRequest $request, User $user, $id)
+    public function destroy(DeletePostRequest $request, User $user, Post $post)
     {
-        $user->posts()->find($id)->delete();
-        return response()->json("Post Deleted");
+        if ($post->delete())
+            return response()->json("Post Deleted Successfully");
     }
 }

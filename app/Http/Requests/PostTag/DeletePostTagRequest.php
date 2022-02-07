@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\PostTag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostTagDeleteRequest extends FormRequest
+class DeletePostTagRequest extends FormRequest
 {
     public function authorize()
     {
-        $user = $this->post->user_id;
-        return(auth()->user()->id == $user);
+        return (auth()->user()->id == $this->post->user_id);
     }
 
     public function rules()

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostRequest extends FormRequest
+class StorePostRequest extends FormRequest
 {
     public function authorize()
     {
-        $compare = $this->user->id;
-        return (auth()->user()->id == $compare);
+        return (auth()->user()->id == $this->user->id);
     }
 
     public function rules()
