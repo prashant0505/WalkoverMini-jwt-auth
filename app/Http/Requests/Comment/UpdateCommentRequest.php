@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CommentPatchRequest extends FormRequest
+class UpdateCommentRequest extends FormRequest
 {
     public function authorize()
     {
-        $compare = $this->company->id;
-        return (auth()->user()->company_id == $compare);
+        return (auth()->user()->id == $this->comment->user_id);
     }
 
     public function rules()

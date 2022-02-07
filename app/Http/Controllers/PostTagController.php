@@ -7,6 +7,7 @@ use App\Http\Requests\PostTag\DeletePostTagRequest;
 use App\Http\Requests\PostTag\IndexPostTagRequest;
 use App\Http\Requests\PostTag\ShowPostTagRequest;
 use App\Http\Requests\PostTag\StorePostTagRequest;
+use App\Http\Requests\PostTag\UpdatePostTagRequest;
 use App\Http\Requests\PostTagDeleteRequest;
 use App\Models\Post_Tag;
 use Illuminate\Http\Request;
@@ -37,6 +38,15 @@ class PostTagController extends Controller
                 'PostTag' => $posttag
             ], 201);
     }
+    
+    // public function update(UpdatePostTagRequest $request, Post $post ,Tag $tag)
+    // {
+    //     $posttag = $post->tags()->dettach($request->tag_id);
+    //         return response()->json([
+    //             'message' => 'Tag used in Post successfully ',
+    //             'PostTag' => $posttag
+    //         ], 201);
+    // }
 
     public function destroy(DeletePostTagRequest $request, Post $post)
     {

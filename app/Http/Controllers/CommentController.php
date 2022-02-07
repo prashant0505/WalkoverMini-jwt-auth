@@ -3,47 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Requests\CommentRequest;
-use App\Http\Requests\CommentPatchRequest;
 use App\Models\Comment;
+
+use App\Http\Requests\Comment\StoreCommentRequest;
+use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Http\Requests\Comment\DeleteCommentRequest;
+use App\Http\Requests\Comment\ShowCommentRequest;
+use App\Http\Requests\Comment\IndexCommentRequest;
 
 class CommentController extends Controller
 {
-    public function create(CommentRequest $request, User $user)
+    
+    public function index(IndexCommentRequest $request, User $user)
     {
-        $comment = $user->comments()->create([
-            'body' => $request->body,
-            'post_id' => $request->post_id
-        ]);
+        return $user->comments()->get();
+    }
+    
+    public function show(ShowCommentRequest $request, User $user, Comment $comment)
+    {
+        return $comment;
+    }
 
+    public function store(StoreCommentRequest $request, User $user)
+    {
+        $comment = $user->comments()->create(array_filter($request->all()));
         return response()->json([
-            'message' => 'Commented Successfully ',
-            'user' => $comment
+            'message' => 'Comment made Successfully',
+            'company' => $comment
         ], 201);
     }
 
-    public function show(Comment $comment, $userid, $id)
+    public function update(UpdateCommentRequest $request, User $user, Comment $comment)
     {
-        return $comment->find($id);
-    }
-
-    public function update(CommentPatchRequest $request, User $user, $id)
-    {
-        $comment = $user->comments()->where("id", $id)->update([
-            'body' => $request->body,
-            'user_id' => $request->userId,
-            'post_id' => $request->postId
-        ]);
+        $updated = $comment->update(array_filter($request->all()));
         return response()->json([
-            'message' => 'Comment Edited Successfully',
-            'user' => $comment
+            'message' => 'Comment Updated Successfully',
+            'Comment' => $updated
         ], 201);
     }
 
-    public function destroy(CommentPatchRequest $request, User $user, $id)
+    public function destroy(DeleteCommentRequest $request, User $user, Comment $comment)
     {
-        $user->comments()->find($id)->delete();
-        return response()->json("Comment Deleted");
+        if ($comment->delete())
+            return response()->json("Comment Deleted Successfully");
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\PostTag;
+namespace App\Http\Requests\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePostTagRequest extends FormRequest
+class IndexCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdatePostTagRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return (auth()->user()->company_id == $this->user->company_id);
     }
 
     /**

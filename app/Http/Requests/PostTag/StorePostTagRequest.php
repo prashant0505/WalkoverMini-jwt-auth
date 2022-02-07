@@ -8,8 +8,7 @@ class StorePostTagRequest extends FormRequest
 {
     public function authorize()
     {
-        $user = $this->post->user_id;
-        return(auth()->user()->id == $user);
+        return (auth()->user()->id == $this->post->user_id);
     }
 
     public function rules()
