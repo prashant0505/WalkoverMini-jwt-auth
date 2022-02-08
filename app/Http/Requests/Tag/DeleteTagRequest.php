@@ -13,7 +13,7 @@ class DeleteTagRequest extends FormRequest
      */
     public function authorize()
     {
-        return (auth()->user()->id == $this->tag->user_id);
+        return (auth()->user()->id == $this->tag->user_id && auth()->user()->id == $this->user->id);
     }
 
     /**

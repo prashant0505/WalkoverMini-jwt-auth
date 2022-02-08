@@ -8,7 +8,7 @@ class UpdateCategoryRequest extends FormRequest
 {
     public function authorize()
     {
-        return (auth()->user()->id == $this->category->user_id);
+        return (auth()->user()->id == $this->category->user_id && auth()->user()->id == $this->user->id);
     }
 
     public function rules()

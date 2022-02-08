@@ -25,12 +25,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request, Company $company)
     {
-        $user = $company->users()->create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'salary' => $request->salary,
-        ]);
+        $user = $company->users()->create($request->validated);
         return response()->json([
             'message' => 'User Created Successfully',
             'User' => $user
@@ -42,7 +37,7 @@ class UserController extends Controller
         if ($request->has('password')) {
             $request->merge(['password' => Hash::make($request->password)]);
         }
-        $updated = $user->update(array_filter($request->all()));
+        $updated = $user->update($request->validated);
         return response()->json([
             'message' => 'User Updated Successfully',
             'User' => $updated

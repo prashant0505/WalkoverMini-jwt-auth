@@ -13,7 +13,7 @@ class ShowTagRequest extends FormRequest
      */
     public function authorize()
     {
-        return (auth()->user()->id == $this->user->id);
+        return (auth()->user()->id == $this->user->id && auth()->user()->company_id == $this->user->company_id);
     }
 
     /**

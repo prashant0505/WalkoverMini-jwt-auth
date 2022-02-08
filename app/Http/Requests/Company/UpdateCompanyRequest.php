@@ -16,7 +16,6 @@ class UpdateCompanyRequest extends FormRequest
         return [
             'name' => 'string|min:2|max:100',
             'location' => 'string|min:3',
-            'company_id' => 'exists:companies,id'
         ];
     }
 }

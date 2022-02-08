@@ -24,9 +24,7 @@ class TagController extends Controller
 
     public function create(StoreTagRequest $request, User $user)
     {
-        $tag = $user->tags()->create([
-            'name' => $request->name,
-        ]);
+        $tag = $user->tags()->create($request->validated);
 
         return response()->json([
             'message' => 'Tag Created Successfully',
@@ -36,7 +34,7 @@ class TagController extends Controller
 
     public function update(UpdateTagRequest $request, User $user, Tag $tag)
     {
-        $tag = $tag->update(array_filter($request->all()));
+        $tag = $tag->update($request->validated);
         return response()->json([
             'message' => 'Tag Updated Succesfully',
             'user' => $tag

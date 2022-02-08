@@ -33,12 +33,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('profile', [AuthController::class, 'profile']);
     });
 
-    // Routes for Company
-    Route::get('/companies', [CompanyController::class, 'index']);
-    Route::get('/companies/{company}', [CompanyController::class, 'show']);
-    Route::post('/companies', [CompanyController::class, 'store']);
-    Route::patch('/companies/{company}', [CompanyController::class, 'update']);
-    Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
+    // Route for Company
+    Route::resource('companies','CompanyController');
 
     // Routes for user
     Route::get('/companies/{company}/users', [UserController::class, 'index']);
@@ -46,7 +42,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('/companies/{company}/users', [UserController::class, 'store']);
     Route::patch('/companies/{company}/users/{user}', [UserController::class, 'update']);
     Route::delete('/companies/{company}/users/{user}', [UserController::class, 'destroy']);
-
+    
     // Routes for Post
     Route::get('/users/{user}/posts', [PostController::class, 'index']);
     Route::get('/users/{user}/posts/{post}', [PostController::class, 'show']);
@@ -76,9 +72,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::delete('/users/{user}/comments/{comment}', [CommentController::class, 'destroy']);
 
     // Routes for Post-Tag
-    Route::get('/posts/{post}/posttags', [PostTagController::class, 'index']);
-    Route::get('/tags/{tag}/posttags', [PostTagController::class, 'show']);
-    // Route::post('/posts/{post}/tags/{tag}/posttags', [PostTagController::class, 'update']);
-    Route::post('/posts/{post}/posttags', [PostTagController::class, 'store']);
-    Route::delete('/posts/{post}/posttags/{tag}', [PostTagController::class, 'destroy']);
+    Route::get('/posts/{post}/tags', [PostTagController::class, 'index']);
+    Route::get('/tags/{tag}/posts', [PostTagController::class, 'show']);
+    Route::post('/posts/{post}/tags', [PostTagController::class, 'store']);
 });
