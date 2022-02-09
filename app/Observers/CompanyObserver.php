@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Jobs\SendEmailJob;
 use App\Models\Company;
+
 class CompanyObserver
 {
     /**
@@ -12,17 +14,20 @@ class CompanyObserver
      * @return void
      */
     public function created(Company $company)
-    { 
-            $name  = preg_replace("/[^a-zA-Z0-9]/", "", $company->name);
-            $admin= $company->users()->create(([
-               "name" => $name."admin",
-               "salary" => 0,
-               "password" => bcrypt($name."admin@123"),
-               "email" => $name."admin@gmail.com",
-               "company_id"=>$company->id
-           ]));
-           $company['admin'] = $admin; 
-        }
+    {
+        $name  = preg_replace("/[^a-zA-Z0-9]/", "", $company->name);
+        $admin = $company->users()->create(([
+            "name" => $name . "admin",
+            "salary" => 0,
+            "password" => bcrypt($name . "admin@123"),
+            "email" => $name . "admin@gmail.com",
+            "company_id" => $company->id
+        ]));
+        $company['admin'] = $admin;
+
+        $data['email'] = "prashantpatidar39@gmail.com"; 
+        dispatch(new SendEmailJob($data));
+    }
 
     /**
      * Handle the Company "updated" event.
