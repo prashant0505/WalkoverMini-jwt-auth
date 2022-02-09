@@ -8,9 +8,6 @@ class StoreUserRequest extends FormRequest
 {
     public function authorize()
     {
-        if ($this->has('password')) {
-            $this->merge(['password' => bcrypt($this->password)]);
-        }
         return (auth()->user()->id == $this->company->users()->first()->id);
     }
 
@@ -22,5 +19,13 @@ class StoreUserRequest extends FormRequest
             'password' => 'required|string|min:6',
             'salary' => 'required|integer|min:3',
         ];
+    }
+
+    public function validated()
+    {
+        if ($this->has('password')) {
+            $this->merge(['password' => bcrypt($this->password)]);
+        }
+        return $this->all();
     }
 }
