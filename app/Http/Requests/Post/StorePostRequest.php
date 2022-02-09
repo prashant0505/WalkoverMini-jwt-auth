@@ -10,7 +10,6 @@ class StorePostRequest extends FormRequest
 {
     public function authorize()
     {
-        dd(Category::find(request('category_id')));
         $cat_company_id = Category::find(request('category_id'))->users->company_id;
         return (auth()->user()->id == $this->user->id && auth()->user()->company_id == $cat_company_id);
     }

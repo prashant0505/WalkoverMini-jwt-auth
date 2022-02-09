@@ -8,7 +8,7 @@ class UpdateCommentRequest extends FormRequest
 {
     public function authorize()
     {
-        return (auth()->user()->id == $this->comment->user_id);
+        return (auth()->user()->id == $this->comment->user_id && auth()->user()->id == $this->user->id) ;
     }
 
     public function rules()

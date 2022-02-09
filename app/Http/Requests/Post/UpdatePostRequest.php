@@ -8,7 +8,7 @@ class UpdatePostRequest extends FormRequest
 {
     public function authorize()
     {
-        return (auth()->user()->id == $this->post->user_id);
+        return (auth()->user()->id == $this->post->user_id && auth()->user()->id == $this->user->id);
     }
 
     public function rules()
