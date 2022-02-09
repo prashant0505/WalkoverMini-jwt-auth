@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\Request;
 
 class StoreUserRequest extends FormRequest
 {
-    public function authorize()
-    {
+    public function authorize(){ 
+        if ($this->has('password')) {
+            $this->merge(['password' => bcrypt($this->password)]);
+        }   
         return (auth()->user()->id == $this->company->users()->first()->id);
     }
 
-    public function rules()
-    {
+    public function rules(){
         return [
             'name' => 'required|string|min:2|max:100',
             'email' => 'required|string|email|max:100|unique:users',

@@ -10,6 +10,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Company;
 use App\Services\StoreUserService;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
