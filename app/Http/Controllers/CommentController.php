@@ -14,18 +14,15 @@ use App\Http\Requests\Comment\IndexCommentRequest;
 class CommentController extends Controller
 {
     
-    public function index(IndexCommentRequest $request, User $user)
-    {
+    public function index(IndexCommentRequest $request, User $user){
         return $user->comments()->get();
     }
     
-    public function show(ShowCommentRequest $request, User $user, Comment $comment)
-    {
+    public function show(ShowCommentRequest $request, User $user, Comment $comment){
         return $comment;
     }
 
-    public function store(StoreCommentRequest $request, User $user)
-    {
+    public function store(StoreCommentRequest $request, User $user){
         $comment = $user->comments()->create($request->validated);
         return response()->json([
             'message' => 'Comment made Successfully',
@@ -33,8 +30,7 @@ class CommentController extends Controller
         ], 201);
     }
 
-    public function update(UpdateCommentRequest $request, User $user, Comment $comment)
-    {
+    public function update(UpdateCommentRequest $request, User $user, Comment $comment){
         $updated = $comment->update($request->validated);
         return response()->json([
             'message' => 'Comment Updated Successfully',
@@ -42,8 +38,7 @@ class CommentController extends Controller
         ], 201);
     }
 
-    public function destroy(DeleteCommentRequest $request, User $user, Comment $comment)
-    {
+    public function destroy(DeleteCommentRequest $request, User $user, Comment $comment){
         if ($comment->delete())
             return response()->json("Comment Deleted Successfully");
     }

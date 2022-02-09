@@ -12,18 +12,15 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    public function index(IndexCategoryRequest $request, User $user)
-    {
+    public function index(IndexCategoryRequest $request, User $user){
         return $user->categories;
     }
 
-    public function show(ShowCategoryRequest $request, User $user, Category $category)
-    {
+    public function show(ShowCategoryRequest $request, User $user, Category $category){
         return $category;
     }
 
-    public function store(StoreCategoryRequest $request, User $user)
-    {
+    public function store(StoreCategoryRequest $request, User $user){
         $category = $user->categories()->create($request->validated());
         return response()->json([
             'message' => 'Category Created Successfully',
@@ -31,8 +28,7 @@ class CategoryController extends Controller
         ], 201);
     }
 
-    public function update(UpdateCategoryRequest $request ,User $user, Category $category)
-    {
+    public function update(UpdateCategoryRequest $request ,User $user, Category $category){
         $updated = $category->update($request->validated());
         return response()->json([
             'message' => 'Category Created Updated',
@@ -40,8 +36,7 @@ class CategoryController extends Controller
         ], 201);
     }
 
-    public function destroy(DeleteCategoryRequest $request, User $user, Category $category)
-    {
+    public function destroy(DeleteCategoryRequest $request, User $user, Category $category){
         if($category->delete())
         return response()->json("Category Deleted Successfully");
     }

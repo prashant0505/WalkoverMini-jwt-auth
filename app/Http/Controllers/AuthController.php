@@ -9,14 +9,12 @@ use App\Http\Requests\Login\LoginAuthRequest;
 class AuthController extends Controller
 {
     protected $user;
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
         $this->user = $this->guard()->user();
     }
 
-    public function login(LoginAuthRequest $request)
-    {
+    public function login(LoginAuthRequest $request){
         $credentials = request(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
@@ -26,8 +24,7 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    public function profile()
-    {
+    public function profile(){
         return response()->json(auth()->user());
     }
     
@@ -37,16 +34,14 @@ class AuthController extends Controller
         return response()->json(['message' => 'User successfully logged out.']);
     }
 
-    protected function respondWithToken($token)
-    {
+    protected function respondWithToken($token){
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
         ]);
     }
 
-    public function guard()
-    {
+    public function guard(){
         return Auth::guard();
     }
 }

@@ -9,34 +9,27 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Company;
-use Illuminate\Support\Facades\Hash;
+use App\Services\StoreUserService;
 
 class UserController extends Controller
 {
-    public function index(IndexUserRequest $request, Company $company)
-    {
+    public function index(IndexUserRequest $request, Company $company){
         return $company->users()->get();
     }
 
-    public function show(ShowUserRequest $request, Company $company, User $user)
-    {
+    public function show(ShowUserRequest $request, Company $company, User $user){
         return $user;
     }
 
-    public function store(StoreUserRequest $request, Company $company)
-    {
-        $user = $company->users()->create($request->validated());
+    public function store(StoreUserRequest $request, StoreUserService $service, Company $company){
+        $user = $service->store($request, $company);
         return response()->json([
             'message' => 'User Created Successfully',
             'User' => $user
         ], 201);
     }
 
-    public function update(UpdateUserRequest $request, Company $company, User $user)
-    {
-        if ($request->has('password')) {
-            $request->merge(['password' => Hash::make($request->password)]);
-        }
+    public function update(UpdateUserRequest $request, Company $company, User $user){
         $updated = $user->update($request->validated());
         return response()->json([
             'message' => 'User Updated Successfully',
@@ -44,9 +37,8 @@ class UserController extends Controller
         ], 201);
     }
 
-    public function destroy(DeleteUserRequest $request, Company $company, User $user)
-    {
-        if($user->delete())
-        return response()->json(['message' => "User Deleted"]);
+    public function destroy(DeleteUserRequest $request, Company $company, User $user){
+        if ($user->delete())
+            return response()->json(['message' => "User Deleted"]);
     }
 }
