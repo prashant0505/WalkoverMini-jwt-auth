@@ -2,13 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostTagController;
-use App\Http\Controllers\TagController;
-use App\Http\Controllers\UserController;
 
 /*
 |__________________________________________________________________________
@@ -34,45 +28,25 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     });
 
     // Route for Company
-    Route::resource('companies','CompanyController');
+    Route::resource('companies', 'CompanyController');
 
     // Routes for user
-    Route::get('/companies/{company}/users', [UserController::class, 'index']);
-    Route::get('/companies/{company}/users/{user}', [UserController::class, 'show']);
-    Route::post('/companies/{company}/users', [UserController::class, 'store']);
-    Route::patch('/companies/{company}/users/{user}', [UserController::class, 'update']);
-    Route::delete('/companies/{company}/users/{user}', [UserController::class, 'destroy']);
-    
+    Route::resource('/companies/{company}/users', 'UserController');
+
     // Routes for Post
-    Route::get('/users/{user}/posts', [PostController::class, 'index']);
-    Route::get('/users/{user}/posts/{post}', [PostController::class, 'show']);
-    Route::post('/users/{user}/posts', [PostController::class, 'store']);
-    Route::patch('/users/{user}/posts/{post}', [PostController::class, 'update']);
-    Route::delete('/users/{user}/posts/{post}', [PostController::class, 'destroy']);
+    Route::resource('/users/{user}/posts', 'PostController');
 
     // Routes for Category
-    Route::get('/users/{user}/categories', [CategoryController::class, 'index']);
-    Route::get('/users/{user}/categories/{category}', [CategoryController::class, 'show']);
-    Route::post('/users/{user}/categories', [CategoryController::class, 'store']);
-    Route::patch('/users/{user}/categories/{category}', [CategoryController::class, 'update']);
-    Route::delete('/users/{user}/categories/{category}', [CategoryController::class, 'destroy']);
+    Route::resource('/users/{user}/categories', 'CategoryController');
 
     // Routes for Tag
-    Route::get('/users/{user}/tags', [TagController::class, 'index']);
-    Route::get('/users/{user}/tags/{tag}', [TagController::class, 'show']);
-    Route::post('/users/{user}/tags', [TagController::class, 'create']);
-    Route::patch('/users/{user}/tags/{tag}', [TagController::class, 'update']);
-    Route::delete('/users/{user}/tags/{tag}', [TagController::class, 'destroy']);
+    Route::resource('/users/{user}/tags', 'TagController');
 
     // Routes for Comment
-    Route::get('/users/{user}/comments', [CommentController::class, 'index']);
-    Route::get('/users/{user}/comments/{comment}', [CommentController::class, 'show']);
-    Route::post('/users/{user}/comments', [CommentController::class, 'store']);
-    Route::patch('/users/{user}/comments/{comment}', [CommentController::class, 'update']);
-    Route::delete('/users/{user}/comments/{comment}', [CommentController::class, 'destroy']);
+    Route::resource('/users/{user}/comments', 'CommentController');
 
     // Routes for Post-Tag
-    Route::get('/posts/{post}/tags', [PostTagController::class, 'index']);
+    Route::resource('/posts/{post}/tags', 'PostTagController');
+
     Route::get('/tags/{tag}/posts', [PostTagController::class, 'show']);
-    Route::post('/posts/{post}/tags', [PostTagController::class, 'store']);
 });
