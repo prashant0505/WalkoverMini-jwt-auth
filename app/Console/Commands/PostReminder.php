@@ -2,13 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\PostReminderJob;
-use App\Jobs\SendEmailJob;
-use App\Mail\SendEmail;
+use App\Jobs\PostReminderEmailJob;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Console\Command;
-use League\CommonMark\Extension\Table\Table;
 
 class PostReminder extends Command
 {
@@ -43,11 +40,10 @@ class PostReminder extends Command
      */
     public function handle()
     {
-         $notposted = User::select('email')->whereNotIn('id', Post::select('user_id'))->get();
-
-         foreach($notposted as $i){
-         $data['email'] = "prashantpatidar39@gmail.com";
-         dispatch(new SendEmailJob($data));
-         }
+        $notposted = User::select('email')->whereNotIn('id', Post::select('user_id'))->get();
+        foreach ($notposted as $i) {
+            $data['email'] = "prashantpatidar39@gmail.com";
+            dispatch(new PostReminderEmailJob($data));
+        }
     }
 }

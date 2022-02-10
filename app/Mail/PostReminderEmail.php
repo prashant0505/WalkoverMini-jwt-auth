@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PostReminder extends Mailable
+class PostReminderEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -28,6 +28,6 @@ class PostReminder extends Mailable
      */
     public function build()
     {
-        return $this->subject('Reminderrr')->view('welcome');
+        return $this->subject("Notification to post")->view('PostReminder');
     }
 }

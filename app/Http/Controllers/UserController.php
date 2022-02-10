@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Services\User\SaveUserService;
 use App\Http\Requests\User\DeleteUserRequest;
 use App\Http\Requests\User\IndexUserRequest;
 use App\Http\Requests\User\ShowUserRequest;
@@ -10,7 +10,6 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Company;
-use App\Services\User\SaveUserService;
 class UserController extends Controller
 {
     public function index(IndexUserRequest $request, Company $company){

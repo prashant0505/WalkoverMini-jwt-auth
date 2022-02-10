@@ -2,16 +2,15 @@
 
 namespace App\Jobs;
 
-use App\Console\Commands\PostReminder;
+use App\Mail\PostReminderEmail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class PostReminderJob implements ShouldQueue
+class PostReminderEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -20,7 +19,6 @@ class PostReminderJob implements ShouldQueue
      *
      * @return void
      */
-
     public $details;
     public function __construct($details)
     {
@@ -34,7 +32,7 @@ class PostReminderJob implements ShouldQueue
      */
     public function handle()
     {
-        $mail = new PostReminder();
-        Mail::to($this->details['email']->send($mail));
+        $email= new PostReminderEmail();
+        Mail::to($this->details['email'])->send($email);
     }
 }
